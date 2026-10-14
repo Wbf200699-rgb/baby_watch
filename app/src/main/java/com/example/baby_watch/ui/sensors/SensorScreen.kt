@@ -1,12 +1,14 @@
 package com.example.baby_watch.ui.sensors
 
-import androidx.compose.foundation.Canvas
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -16,11 +18,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AutoStories
 import androidx.compose.material.icons.filled.DeviceThermostat
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.Sensors
@@ -28,24 +30,31 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.ui.BiasAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.lerp
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.baby_watch.data.server.MatrixFrame
 import com.example.baby_watch.data.server.Bme688Summary
 import com.example.baby_watch.data.server.MobileServerRepository
@@ -62,6 +71,8 @@ import com.example.baby_watch.ui.theme.Secondary
 import com.example.baby_watch.ui.theme.TextPrimary
 import com.example.baby_watch.ui.theme.TextSecondary
 import com.example.baby_watch.ui.theme.TextTertiary
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 private enum class MatrixPalette {
@@ -69,15 +80,23 @@ private enum class MatrixPalette {
     Pressure,
 }
 
+private data class MatrixStatistics(
+    val values: List<Int>,
+    val minimum: Int,
+    val maximum: Int,
+    val centerValue: Int?,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SensorScreen(modifier: Modifier = Modifier) {
-    val repositoryState by MobileServerRepository.state.collectAsState()
-    val thermalMatrix by MobileServerRepository.thermalMatrix.collectAsState()
-    val pressureMatrix by MobileServerRepository.pressureMatrix.collectAsState()
+    val repositoryState by MobileServerRepository.state.collectAsStateWithLifecycle()
+    val thermalMatrix by MobileServerRepository.thermalMatrix.collectAsStateWithLifecycle()
+    val pressureMatrix by MobileServerRepository.pressureMatrix.collectAsStateWithLifecycle()
     val snapshot = repositoryState.snapshot
     val deviceOnline = repositoryState.connectionStatus ==
         ServerConnectionStatus.Connected && snapshot.device.online
+    val storyTransferActive = snapshot.storyTransfer.active
 
     Scaffold(
         containerColor = Background,
@@ -94,17 +113,18 @@ fun SensorScreen(modifier: Modifier = Modifier) {
                             )
                             Spacer(Modifier.width(9.dp))
                             Text(
-                                "传感器",
+                                "数据中心",
                                 fontSize = 24.sp,
                                 fontWeight = FontWeight.Bold,
                                 color = TextPrimary,
                             )
                         }
                         Text(
-                            when {
-                                repositoryState.connectionStatus != ServerConnectionStatus.Connected ->
-                                    repositoryState.errorMessage ?: "正在连接服务端…"
-                                snapshot.device.online -> "服务端实时同步 · 设备在线"
+                             when {
+                                 repositoryState.connectionStatus != ServerConnectionStatus.Connected ->
+                                     repositoryState.errorMessage ?: "正在连接服务端…"
+                                 storyTransferActive -> "AI 故事传输中 · 传感器刷新暂缓"
+                                 snapshot.device.online -> "服务端实时同步 · 设备在线"
                                 else -> "服务端已连接 · 设备离线"
                             },
                             fontSize = 13.sp,
@@ -116,42 +136,113 @@ fun SensorScreen(modifier: Modifier = Modifier) {
             )
         },
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp, vertical = 12.dp),
+                .padding(innerPadding),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
+         ) {
+            if (storyTransferActive) {
+                item(key = "story-transfer-pause") {
+                    SensorRefreshPauseCard()
+                }
+            }
+            item {
+                FivePointTemperatureCard(
+                    values = snapshot.fivePointTemperaturesC,
+                    deviceOnline = deviceOnline,
+                )
+            }
+            item {
+                EnvironmentSensorCard(
+                    scd41 = snapshot.scd41,
+                    bme688 = snapshot.bme688,
+                    bme688Supported = repositoryState.capabilities.bme688Supported,
+                    deviceOnline = deviceOnline,
+                )
+            }
+            item {
+                val evidence = snapshot.fusion.evidence
+                MatrixImageCard(
+                    title = "热成像",
+                    description = "服务端实时热成像矩阵",
+                    icon = Icons.Default.DeviceThermostat,
+                    matrix = thermalMatrix,
+                    palette = MatrixPalette.Thermal,
+                    thermalCenterC = snapshot.thermalCenterC,
+                    fusionEvidenceAvailable = snapshot.fusion.schemaVersion >= 5 && evidence.available,
+                    thermalSourceAvailable = snapshot.fusion.thermalEvidenceAvailable,
+                    bedTemperatureSourceAvailable = snapshot.fusion.bedTemperatureEvidenceAvailable,
+                    fusionSchemaVersion = snapshot.fusion.schemaVersion,
+                    fusionPresenceLabel = snapshot.fusion.contexts["presence"]?.label.orEmpty(),
+                    bodyTemperatureLabel = snapshot.fusion.contexts["body_temperature"]?.label.orEmpty(),
+                    thermalPresenceX1000 = evidence.thermalPresenceX1000,
+                    thermalHotspotPoints = evidence.thermalHotspot.points,
+                    thermalHotspotX1000 = evidence.thermalHotspot.xX1000,
+                    thermalHotspotY1000 = evidence.thermalHotspot.yX1000,
+                    thermalHotspotMeanC = evidence.thermalHotspot.meanC,
+                    bedLeftC = evidence.bedTemperature.leftC,
+                    bedCenterC = evidence.bedTemperature.centerC,
+                    bedRightC = evidence.bedTemperature.rightC,
+                    bedSpreadC = evidence.bedTemperature.spreadC,
+                    hotspotRegionLabel = evidence.bedTemperature.hotspotRegionLabel,
+                    deviceOnline = deviceOnline,
+                )
+            }
+            item {
+                MatrixImageCard(
+                    title = "压力分布",
+                    description = "服务端实时压力矩阵",
+                    icon = Icons.Default.GridOn,
+                    matrix = pressureMatrix,
+                    palette = MatrixPalette.Pressure,
+                    pressure = snapshot.pressure,
+                    deviceOnline = deviceOnline,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SensorRefreshPauseCard() {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer),
+        elevation = CardDefaults.cardElevation(0.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            FivePointTemperatureCard(
-                values = snapshot.fivePointTemperaturesC,
-                deviceOnline = deviceOnline,
-            )
-            EnvironmentSensorCard(
-                scd41 = snapshot.scd41,
-                bme688 = snapshot.bme688,
-                bme688Supported = repositoryState.capabilities.bme688Supported,
-                deviceOnline = deviceOnline,
-            )
-            MatrixImageCard(
-                title = "热成像",
-                description = "服务端热成像矩阵",
-                icon = Icons.Default.DeviceThermostat,
-                matrix = thermalMatrix,
-                palette = MatrixPalette.Thermal,
-                thermalCenterC = snapshot.thermalCenterC,
-                deviceOnline = deviceOnline,
-            )
-            MatrixImageCard(
-                title = "压力分布",
-                description = "服务端压力矩阵",
-                icon = Icons.Default.GridOn,
-                matrix = pressureMatrix,
-                palette = MatrixPalette.Pressure,
-                pressure = snapshot.pressure,
-                deviceOnline = deviceOnline,
-            )
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.14f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    Icons.Default.AutoStories,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.secondary,
+                    modifier = Modifier.size(21.dp),
+                )
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    "正在把故事送到设备",
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer,
+                )
+                Text(
+                    "为保证传输稳定，当前保留上次读数；完成后自动恢复实时刷新。",
+                    fontSize = 12.sp,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.76f),
+                )
+            }
         }
     }
 }
@@ -327,34 +418,34 @@ private fun FivePointTemperatureCard(values: List<Float?>, deviceOnline: Boolean
             ) {
                 TemperaturePoint(
                     modifier = Modifier.align(Alignment.TopStart),
-                    label = "T1 左上",
-                    value = values.getOrNull(0),
-                )
-                TemperaturePoint(
-                    modifier = Modifier.align(Alignment.TopEnd),
-                    label = "T2 右上",
+                    label = "T2 左上",
                     value = values.getOrNull(1),
                 )
                 TemperaturePoint(
-                    modifier = Modifier.align(Alignment.Center),
-                    label = "T3 中心",
-                    value = values.getOrNull(2),
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    label = "T5 右上",
+                    value = values.getOrNull(4),
                 )
                 TemperaturePoint(
-                    modifier = Modifier.align(Alignment.BottomStart),
-                    label = "T4 左下",
+                    modifier = Modifier.align(Alignment.Center),
+                    label = "T4 中心",
                     value = values.getOrNull(3),
                 )
                 TemperaturePoint(
+                    modifier = Modifier.align(Alignment.BottomStart),
+                    label = "T1 左下",
+                    value = values.getOrNull(0),
+                )
+                TemperaturePoint(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    label = "T5 右下",
-                    value = values.getOrNull(4),
+                    label = "T3 右下",
+                    value = values.getOrNull(2),
                 )
             }
             Spacer(Modifier.height(10.dp))
             Text(
                 if (deviceOnline) {
-                    "点位顺序对应服务端 t_mc[0..4]；温度阈值需按实际安装位置标定。"
+                    "物理映射：T1 左下、T2 左上、T3 右下、T4 中心、T5 右上。"
                 } else {
                     "设备当前离线，以上为服务端保留的最近一次数据。"
                 },
@@ -409,8 +500,32 @@ private fun MatrixImageCard(
     palette: MatrixPalette,
     thermalCenterC: Float? = null,
     pressure: PressureSummary? = null,
+    fusionEvidenceAvailable: Boolean = false,
+    thermalSourceAvailable: Boolean = false,
+    bedTemperatureSourceAvailable: Boolean = false,
+    fusionSchemaVersion: Int = 1,
+    fusionPresenceLabel: String = "unknown",
+    bodyTemperatureLabel: String = "unknown",
+    thermalPresenceX1000: Int = 0,
+    thermalHotspotPoints: Int = 0,
+    thermalHotspotX1000: Int = 0,
+    thermalHotspotY1000: Int = 0,
+    thermalHotspotMeanC: Float? = null,
+    bedLeftC: Float? = null,
+    bedCenterC: Float? = null,
+    bedRightC: Float? = null,
+    bedSpreadC: Float? = null,
+    hotspotRegionLabel: String = "未知",
     deviceOnline: Boolean,
 ) {
+    val statistics = remember(
+        matrix?.sequence,
+        matrix?.receivedAt,
+        matrix?.rows,
+        matrix?.cols,
+    ) {
+        matrix?.statisticsOrNull()
+    }
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(18.dp),
@@ -468,12 +583,22 @@ private fun MatrixImageCard(
             }
 
             Spacer(Modifier.height(14.dp))
-            if (matrix == null || matrix.rows <= 0 || matrix.cols <= 0 || matrix.values.isEmpty()) {
+            if (matrix == null || statistics == null) {
                 EmptyMatrixPlaceholder(palette)
             } else {
-                MatrixCanvas(matrix = matrix, palette = palette)
+                MatrixCanvas(
+                    matrix = matrix,
+                    palette = palette,
+                    statistics = statistics,
+                    hotspotX1000 = thermalHotspotX1000.takeIf {
+                        fusionEvidenceAvailable && thermalSourceAvailable && thermalHotspotPoints > 0
+                    },
+                    hotspotY1000 = thermalHotspotY1000.takeIf {
+                        fusionEvidenceAvailable && thermalSourceAvailable && thermalHotspotPoints > 0
+                    },
+                )
                 Spacer(Modifier.height(10.dp))
-                MatrixLegend(matrix = matrix, palette = palette)
+                MatrixLegend(matrix = matrix, palette = palette, statistics = statistics)
                 Text(
                     "${if (deviceOnline) "实时序列" else "最近序列"} ${matrix.sequence} · ${
                         matrix.receivedAt.ifBlank { "等待时间戳" }
@@ -507,12 +632,33 @@ private fun MatrixImageCard(
                     Spacer(Modifier.height(12.dp))
                     ThermalTemperatureSummary(
                         matrix = matrix,
+                        statistics = statistics,
                         serverCenterC = thermalCenterC,
                     )
                 } else if (pressure != null) {
                     Spacer(Modifier.height(12.dp))
                     PressureSignalSummary(pressure)
                 }
+            }
+            if (palette == MatrixPalette.Thermal && fusionEvidenceAvailable) {
+                Spacer(Modifier.height(12.dp))
+                ThermalFusionSummary(
+                    hotspotPoints = thermalHotspotPoints,
+                    hotspotX1000 = thermalHotspotX1000,
+                    hotspotY1000 = thermalHotspotY1000,
+                    hotspotMeanC = thermalHotspotMeanC,
+                    bedLeftC = bedLeftC,
+                    bedCenterC = bedCenterC,
+                    bedRightC = bedRightC,
+                    bedSpreadC = bedSpreadC,
+                    hotspotRegionLabel = hotspotRegionLabel,
+                    thermalSourceAvailable = thermalSourceAvailable,
+                    bedTemperatureSourceAvailable = bedTemperatureSourceAvailable,
+                    fusionSchemaVersion = fusionSchemaVersion,
+                    fusionPresenceLabel = fusionPresenceLabel,
+                    bodyTemperatureLabel = bodyTemperatureLabel,
+                    thermalPresenceX1000 = thermalPresenceX1000,
+                )
             }
         }
     }
@@ -548,17 +694,12 @@ private fun PressureSignalSummary(pressure: PressureSummary) {
 @Composable
 private fun ThermalTemperatureSummary(
     matrix: MatrixFrame,
+    statistics: MatrixStatistics,
     serverCenterC: Float?,
 ) {
-    val values = matrix.values.take(matrix.rows * matrix.cols)
-    val minimumC = values.minOrNull()?.let { thermalValueC(it, matrix.unit) }
-    val maximumC = values.maxOrNull()?.let { thermalValueC(it, matrix.unit) }
-    val centerIndex = if (matrix.rows > 0 && matrix.cols > 0) {
-        (matrix.rows / 2) * matrix.cols + (matrix.cols / 2)
-    } else {
-        -1
-    }
-    val matrixCenterC = values.getOrNull(centerIndex)?.let { thermalValueC(it, matrix.unit) }
+    val minimumC = thermalValueC(statistics.minimum, matrix.unit)
+    val maximumC = thermalValueC(statistics.maximum, matrix.unit)
+    val matrixCenterC = statistics.centerValue?.let { thermalValueC(it, matrix.unit) }
     val centerC = serverCenterC ?: matrixCenterC
 
     Row(
@@ -586,6 +727,153 @@ private fun ThermalTemperatureSummary(
             color = Primary,
             background = Color(0xFFEAF2FF),
         )
+    }
+}
+
+@Composable
+private fun ThermalFusionSummary(
+    hotspotPoints: Int,
+    hotspotX1000: Int,
+    hotspotY1000: Int,
+    hotspotMeanC: Float?,
+    bedLeftC: Float?,
+    bedCenterC: Float?,
+    bedRightC: Float?,
+    bedSpreadC: Float?,
+    hotspotRegionLabel: String,
+    thermalSourceAvailable: Boolean,
+    bedTemperatureSourceAvailable: Boolean,
+    fusionSchemaVersion: Int,
+    fusionPresenceLabel: String,
+    bodyTemperatureLabel: String,
+    thermalPresenceX1000: Int,
+) {
+    val hotspotAvailable = thermalSourceAvailable && hotspotPoints > 0
+    val feverScreeningSupported = fusionSchemaVersion >= 8
+    val feverScreeningValid = feverScreeningSupported &&
+        thermalSourceAvailable &&
+        fusionPresenceLabel.equals("present", ignoreCase = true) &&
+        thermalPresenceX1000 >= 550 &&
+        hotspotPoints >= 4 &&
+        hotspotMeanC?.isFinite() == true &&
+        bodyTemperatureLabel.lowercase() in setOf("normal", "high")
+    val hotspotRegionAvailable = bedTemperatureSourceAvailable &&
+        hotspotRegionLabel.isNotBlank() &&
+        hotspotRegionLabel != "--" &&
+        hotspotRegionLabel != "未知"
+
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            "床面温度分区",
+            fontSize = 13.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = TextPrimary,
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            EnvironmentValue(
+                Modifier.weight(1f),
+                "左侧",
+                bedLeftC?.takeIf { bedTemperatureSourceAvailable }?.let { "%.1f°C".format(it) } ?: "--",
+                bedTemperatureSourceAvailable && bedLeftC != null,
+            )
+            EnvironmentValue(
+                Modifier.weight(1f),
+                "中心",
+                bedCenterC?.takeIf { bedTemperatureSourceAvailable }?.let { "%.1f°C".format(it) } ?: "--",
+                bedTemperatureSourceAvailable && bedCenterC != null,
+            )
+            EnvironmentValue(
+                Modifier.weight(1f),
+                "右侧",
+                bedRightC?.takeIf { bedTemperatureSourceAvailable }?.let { "%.1f°C".format(it) } ?: "--",
+                bedTemperatureSourceAvailable && bedRightC != null,
+            )
+        }
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            EnvironmentValue(
+                Modifier.weight(1f),
+                "区域温差",
+                bedSpreadC?.takeIf { bedTemperatureSourceAvailable }?.let { "%.1f°C".format(it) } ?: "--",
+                bedTemperatureSourceAvailable && bedSpreadC != null,
+            )
+            EnvironmentValue(
+                Modifier.weight(1f),
+                "热点区",
+                hotspotRegionLabel.takeIf { hotspotRegionAvailable } ?: "--",
+                hotspotRegionAvailable,
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(Color(0xFFFFF3E8), RoundedCornerShape(14.dp))
+                .padding(12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        if (feverScreeningValid) {
+                            "体表温度筛查（非医疗测温）"
+                        } else {
+                            "热源区域均温（不可用于体温判断）"
+                        },
+                        fontSize = 12.sp,
+                        color = TextSecondary,
+                    )
+                    Text(
+                        hotspotMeanC?.takeIf { hotspotAvailable }?.let { "%.1f°C".format(it) } ?: "--",
+                        fontSize = 19.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = if (hotspotAvailable) Secondary else TextTertiary,
+                    )
+                }
+                Text(
+                    if (thermalSourceAvailable) {
+                        "有效热源点 ${hotspotPoints.coerceAtLeast(0)}"
+                    } else {
+                        "热成像来源暂不可用"
+                    },
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = TextSecondary,
+                )
+            }
+            Text(
+                if (!thermalSourceAvailable) {
+                    "等待有效热成像融合证据"
+                } else if (feverScreeningSupported && feverScreeningValid) {
+                    val screening = if (bodyTemperatureLabel.equals("high", ignoreCase = true)) {
+                        "筛查偏高，请用合格体温计复测"
+                    } else {
+                        "当前筛查未见温度偏高"
+                    }
+                    "$screening · 热图位置 X ${normalizedCoordinateLabel(hotspotX1000)} · Y ${normalizedCoordinateLabel(hotspotY1000)}"
+                } else if (feverScreeningSupported && !fusionPresenceLabel.equals("present", ignoreCase = true)) {
+                    "宝宝在床证据不足，当前不作体温筛查判断"
+                } else if (feverScreeningSupported && (thermalPresenceX1000 < 550 || hotspotPoints < 4)) {
+                    "热源证据不足，当前不作体温筛查判断"
+                } else if (hotspotPoints > 0) {
+                    "热图内归一化位置 · X ${normalizedCoordinateLabel(hotspotX1000)} · Y ${normalizedCoordinateLabel(hotspotY1000)}"
+                } else {
+                    "当前热图内未形成有效热源区域"
+                },
+                fontSize = 11.sp,
+                color = TextTertiary,
+            )
+            Text(
+                "热成像受距离、环境与遮挡影响，仅作非接触筛查；疑似发热请用体温计复测。",
+                fontSize = 11.sp,
+                color = TextTertiary,
+            )
+        }
     }
 }
 
@@ -651,57 +939,81 @@ private fun EmptyMatrixPlaceholder(palette: MatrixPalette) {
 private fun MatrixCanvas(
     matrix: MatrixFrame,
     palette: MatrixPalette,
+    statistics: MatrixStatistics,
+    hotspotX1000: Int? = null,
+    hotspotY1000: Int? = null,
 ) {
-    val expected = matrix.rows * matrix.cols
-    val values = matrix.values.take(expected)
-    val minimum = values.minOrNull() ?: 0
-    val maximum = values.maxOrNull() ?: minimum
-    val range = (maximum - minimum).toFloat()
     val aspect = (matrix.cols.toFloat() / matrix.rows.toFloat()).coerceIn(0.8f, 2f)
+    val image by produceState<ImageBitmap?>(
+        initialValue = null,
+        key1 = matrix.sequence,
+        key2 = matrix.receivedAt,
+        key3 = palette,
+    ) {
+        value = withContext(Dispatchers.Default) {
+            val range = (statistics.maximum - statistics.minimum).toFloat()
+            val pixels = IntArray(statistics.values.size) { index ->
+                val raw = statistics.values[index]
+                val normalized = if (range == 0f) {
+                    if (raw == 0) 0f else 0.5f
+                } else {
+                    ((raw - statistics.minimum) / range).coerceIn(0f, 1f)
+                }
+                matrixColor(normalized, palette).toArgb()
+            }
+            Bitmap.createBitmap(
+                pixels,
+                matrix.cols,
+                matrix.rows,
+                Bitmap.Config.ARGB_8888,
+            ).asImageBitmap()
+        }
+    }
 
-    Canvas(
+    Box(
         modifier = Modifier
             .fillMaxWidth()
             .aspectRatio(aspect)
             .clip(RoundedCornerShape(14.dp))
             .background(Color(0xFFEDF1F6))
             .border(1.dp, Color(0xFFD8DEE8), RoundedCornerShape(14.dp)),
+        contentAlignment = Alignment.Center,
     ) {
-        val cellWidth = size.width / matrix.cols
-        val cellHeight = size.height / matrix.rows
-        values.forEachIndexed { index, value ->
-            val row = index / matrix.cols
-            val column = index % matrix.cols
-            if (row >= matrix.rows) return@forEachIndexed
-            val normalized = if (range == 0f) {
-                if (value == 0) 0f else 0.5f
-            } else {
-                ((value - minimum) / range).coerceIn(0f, 1f)
-            }
-            drawRect(
-                color = matrixColor(normalized, palette),
-                topLeft = Offset(column * cellWidth, row * cellHeight),
-                size = Size(cellWidth + 0.5f, cellHeight + 0.5f),
+        image?.let { rendered ->
+            Image(
+                bitmap = rendered,
+                contentDescription = if (palette == MatrixPalette.Thermal) {
+                    "热成像矩阵"
+                } else {
+                    "压力分布矩阵"
+                },
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.FillBounds,
+                filterQuality = FilterQuality.None,
             )
         }
-        if (palette == MatrixPalette.Pressure && matrix.rows <= 32 && matrix.cols <= 32) {
-            val gridColor = Color.White.copy(alpha = 0.72f)
-            for (column in 1 until matrix.cols) {
-                val x = column * cellWidth
-                drawLine(
-                    color = gridColor,
-                    start = Offset(x, 0f),
-                    end = Offset(x, size.height),
-                    strokeWidth = 1f,
-                )
-            }
-            for (row in 1 until matrix.rows) {
-                val y = row * cellHeight
-                drawLine(
-                    color = gridColor,
-                    start = Offset(0f, y),
-                    end = Offset(size.width, y),
-                    strokeWidth = 1f,
+        if (
+            palette == MatrixPalette.Thermal &&
+            hotspotX1000 != null && hotspotY1000 != null &&
+            hotspotX1000 in 0..1000 && hotspotY1000 in 0..1000
+        ) {
+            Box(
+                modifier = Modifier
+                    .align(
+                        BiasAlignment(
+                            horizontalBias = hotspotX1000 / 500f - 1f,
+                            verticalBias = hotspotY1000 / 500f - 1f,
+                        )
+                    )
+                    .size(22.dp)
+                    .background(Level3Red.copy(alpha = 0.20f), CircleShape)
+                    .border(2.dp, Color.White, CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Box(
+                    Modifier
+                        .size(7.dp)
+                        .background(Level3Red, CircleShape)
                 )
             }
         }
@@ -712,17 +1024,16 @@ private fun MatrixCanvas(
 private fun MatrixLegend(
     matrix: MatrixFrame,
     palette: MatrixPalette,
+    statistics: MatrixStatistics,
 ) {
-    val minimum = matrix.minimum ?: matrix.values.minOrNull() ?: 0
-    val maximum = matrix.maximum ?: matrix.values.maxOrNull() ?: minimum
     val startLabel: String
     val endLabel: String
     if (palette == MatrixPalette.Thermal) {
-        startLabel = formatThermalValue(minimum, matrix.unit)
-        endLabel = formatThermalValue(maximum, matrix.unit)
+        startLabel = formatThermalValue(statistics.minimum, matrix.unit)
+        endLabel = formatThermalValue(statistics.maximum, matrix.unit)
     } else {
-        startLabel = "低压力 $minimum"
-        endLabel = "高压力 $maximum"
+        startLabel = "低压力 ${statistics.minimum}"
+        endLabel = "高压力 ${statistics.maximum}"
     }
 
     Row(
@@ -830,6 +1141,25 @@ private fun temperatureColor(value: Float?): Color = when {
     value < 38f -> Color(0xFFFF9F43)
     else -> Level3Red
 }
+
+private fun MatrixFrame.statisticsOrNull(): MatrixStatistics? {
+    if (rows <= 0 || cols <= 0) return null
+    val expected = rows * cols
+    if (expected <= 0 || values.size < expected) return null
+    val frameValues = if (values.size == expected) values else values.take(expected)
+    val frameMinimum = minimum ?: frameValues.minOrNull() ?: return null
+    val frameMaximum = maximum ?: frameValues.maxOrNull() ?: frameMinimum
+    val centerIndex = (rows / 2) * cols + (cols / 2)
+    return MatrixStatistics(
+        values = frameValues,
+        minimum = frameMinimum,
+        maximum = frameMaximum,
+        centerValue = frameValues.getOrNull(centerIndex),
+    )
+}
+
+private fun normalizedCoordinateLabel(valueX1000: Int): String =
+    "%.0f%%".format(valueX1000.coerceIn(0, 1000) / 10f)
 
 private fun formatThermalValue(value: Int, unit: String): String {
     return "%.1f°C".format(thermalValueC(value, unit))

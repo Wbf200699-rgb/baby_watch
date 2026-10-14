@@ -1,9 +1,7 @@
 package com.example.baby_watch.notification
 
-import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.content.ContextCompat
+import androidx.core.content.edit
 import com.example.baby_watch.data.server.SafetyEvent
 import com.example.baby_watch.data.server.alertTierForSeverity
 import com.example.baby_watch.service.log.LogManager
@@ -21,12 +19,17 @@ object AlertDispatcher {
         runCatching {
             com.example.baby_watch.notification.phone_notice.phone_notice.show(
                 appContext,
+                event.id,
                 title,
                 detail,
             )
         }.onFailure {
             LogManager.system("通知失败", it.message.orEmpty())
         }
+
+        // Every event remains visible in the notification tray, but repeated sensor bursts must
+        // not continuously vibrate or ring the caregiver's phone.
+        if (!claimAudibleWindow(appContext, tier)) return
 
         when (tier) {
             1 -> runCatching {
@@ -41,15 +44,6 @@ object AlertDispatcher {
                 }.onFailure {
                     LogManager.system("响铃失败", it.message.orEmpty())
                 }
-                if (hasPermission(appContext, Manifest.permission.SEND_SMS)) {
-                    runCatching {
-                        com.example.baby_watch.notification.text.text.send(appContext)
-                    }.onFailure {
-                        LogManager.system("短信发送失败", it.message.orEmpty())
-                    }
-                } else {
-                    LogManager.system("短信未发送", "缺少短信权限")
-                }
             }
 
             3 -> {
@@ -60,21 +54,23 @@ object AlertDispatcher {
                 }.onFailure {
                     LogManager.system("紧急响铃失败", it.message.orEmpty())
                 }
-                if (hasPermission(appContext, Manifest.permission.CALL_PHONE)) {
-                    runCatching {
-                        com.example.baby_watch.notification.call.call.dial(appContext)
-                    }.onFailure {
-                        LogManager.system("自动拨号失败", it.message.orEmpty())
-                    }
-                } else {
-                    LogManager.system("未自动拨号", "缺少电话权限")
-                }
             }
         }
     }
 
-    private fun hasPermission(context: Context, permission: String): Boolean {
-        return ContextCompat.checkSelfPermission(context, permission) ==
-            PackageManager.PERMISSION_GRANTED
+    @Synchronized
+    private fun claimAudibleWindow(context: Context, tier: Int): Boolean {
+        val now = System.currentTimeMillis()
+        val cooldownMs = when (tier) {
+            1 -> 20_000L
+            2 -> 45_000L
+            else -> 60_000L
+        }
+        val preferences = context.getSharedPreferences("alert_delivery_policy", Context.MODE_PRIVATE)
+        val key = "last_signal_tier_$tier"
+        val previous = preferences.getLong(key, 0L)
+        if (previous > 0L && now >= previous && now - previous < cooldownMs) return false
+        preferences.edit { putLong(key, now) }
+        return true
     }
 }

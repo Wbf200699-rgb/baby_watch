@@ -4,10 +4,17 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.net.URI
 
 const val DEFAULT_SERVER_URL = "https://renesas.zyxserver.online"
+const val DEFAULT_LOCAL_SERVER_URL = "http://192.168.137.1:8088"
 const val FIXED_DEVICE_ID = "esp32cam-01"
 const val MOBILE_PROTOCOL_VERSION = 1
+
+enum class ServerEndpointMode {
+    Cloud,
+    Local,
+}
 
 enum class ServerConnectionStatus {
     NotConfigured,
@@ -16,9 +23,38 @@ enum class ServerConnectionStatus {
     Error,
 }
 
+enum class NetworkTransport {
+    None,
+    Wifi,
+    Cellular,
+    Ethernet,
+    Other,
+}
+
+data class NetworkHealth(
+    val available: Boolean = true,
+    val validated: Boolean = true,
+    val metered: Boolean = false,
+    val transport: NetworkTransport = NetworkTransport.Other,
+    val reconnectAttempt: Int = 0,
+    val retryInSeconds: Int = 0,
+    val lastConnectedAtMs: Long? = null,
+    val lastMessageAtMs: Long? = null,
+    val lastTelemetryAtMs: Long? = null,
+)
+
 data class ServerConfigurationView(
     val baseUrl: String = DEFAULT_SERVER_URL,
     val deviceId: String = FIXED_DEVICE_ID,
+    val username: String = "",
+    val hasPassword: Boolean = false,
+    val activeMode: ServerEndpointMode = ServerEndpointMode.Cloud,
+    val cloud: ServerEndpointView = ServerEndpointView(baseUrl = DEFAULT_SERVER_URL),
+    val local: ServerEndpointView = ServerEndpointView(baseUrl = DEFAULT_LOCAL_SERVER_URL),
+)
+
+data class ServerEndpointView(
+    val baseUrl: String,
     val username: String = "",
     val hasPassword: Boolean = false,
 )
@@ -28,13 +64,62 @@ internal data class ServerCredentials(
     val deviceId: String,
     val username: String,
     val password: String,
+    val mode: ServerEndpointMode = ServerEndpointMode.Cloud,
 ) {
     val isComplete: Boolean
-        get() = baseUrl.startsWith("https://") &&
+        get() = isAllowedServerUrl(baseUrl, mode) &&
             deviceId.isNotBlank() &&
-            username.isNotBlank() &&
-            password.isNotBlank()
+            (mode == ServerEndpointMode.Local ||
+                (username.isNotBlank() && password.isNotBlank()))
+
+    val isLocalNetworkEndpoint: Boolean
+        get() = mode == ServerEndpointMode.Local
 }
+
+/**
+ * Accepts public HTTPS origins, but limits clear-text HTTP to literal loopback/RFC1918 IPv4
+ * addresses selected explicitly as the local Plan B endpoint. Host names are deliberately not
+ * resolved here so DNS changes cannot turn an approved local HTTP URL into a public destination.
+ */
+internal fun isAllowedServerUrl(
+    rawUrl: String,
+    mode: ServerEndpointMode,
+): Boolean {
+    val normalized = normalizeServerUrl(rawUrl)
+    val uri = runCatching { URI(normalized) }.getOrNull() ?: return false
+    val scheme = uri.scheme?.lowercase() ?: return false
+    val host = uri.host ?: return false
+    if (uri.userInfo != null || uri.query != null || uri.fragment != null) return false
+    if (uri.rawPath.orEmpty().let { it.isNotEmpty() && it != "/" }) return false
+    if (uri.port != -1 && uri.port !in 1..65535) return false
+
+    return when {
+        scheme == "https" -> true
+        scheme == "http" && mode == ServerEndpointMode.Local -> isPrivateOrLoopbackIpv4(host)
+        else -> false
+    }
+}
+
+internal fun normalizeServerUrl(rawUrl: String): String {
+    val trimmed = rawUrl.trim().trimEnd('/')
+    val schemeSeparator = trimmed.indexOf("://")
+    if (schemeSeparator <= 0) return trimmed
+    return trimmed.substring(0, schemeSeparator).lowercase() + trimmed.substring(schemeSeparator)
+}
+
+private fun isPrivateOrLoopbackIpv4(host: String): Boolean {
+    val match = IPV4_LITERAL.matchEntire(host) ?: return false
+    val rawOctets = match.groupValues.drop(1)
+    if (rawOctets.any { it.length > 1 && it.startsWith('0') }) return false
+    val octets = rawOctets.map { it.toIntOrNull() ?: return false }
+    if (octets.any { it !in 0..255 }) return false
+    return octets[0] == 10 ||
+        octets[0] == 127 ||
+        (octets[0] == 172 && octets[1] in 16..31) ||
+        (octets[0] == 192 && octets[1] == 168)
+}
+
+private val IPV4_LITERAL = Regex("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$")
 
 data class DeviceSummary(
     val id: String = FIXED_DEVICE_ID,
@@ -89,15 +174,123 @@ data class PressureSummary(
     val centerY100: Int? = null,
 )
 
+data class StoryTransferSummary(
+    val active: Boolean = false,
+    val exchangeRetries: Long = 0,
+    val exchangeTimeouts: Long = 0,
+    val downloadError: Int = 0,
+    val httpStatus: Int = 0,
+    val receivedBytes: Long = 0,
+    val mediaSuspendFailures: Long = 0,
+    val audioTransportSuspended: Boolean = false,
+    val videoTransportSuspended: Boolean = false,
+)
+
 data class InferenceSummary(
     val state: Int = 0,
     val candidate: Int = 0,
     val confidence: Float = 0f,
     val severity: Int = 0,
     val faults: Int = 0,
+    val cryConfidence: Float = 0f,
+    val occupied: Boolean? = null,
 ) {
     val stateLabel: String
         get() = safetyStateLabel(state)
+}
+
+data class FusionContextSummary(
+    val code: Int = 0,
+    val label: String = "unknown",
+)
+
+data class FusionAlarmSummary(
+    val level: Int = 0,
+    val label: String = "L0",
+    val primaryType: Int = 0,
+    val primaryLabel: String = "none",
+    val primaryIncidentId: Long = 0,
+    val primaryLifecycle: Int = 0,
+    val activeCount: Int = 0,
+)
+
+data class FusionIncidentSummary(
+    val type: Int,
+    val typeLabel: String,
+    val lifecycle: Int,
+    val lifecycleLabel: String,
+    val level: Int,
+    val severity: Int,
+    val confidence: Int,
+    val sourceMask: Int,
+    val incidentId: Long,
+    val sinceTick: Long,
+)
+
+data class ThermalHotspotEvidence(
+    val points: Int = 0,
+    val xX1000: Int = 0,
+    val yX1000: Int = 0,
+    val meanC: Float? = null,
+)
+
+data class BedTemperatureEvidence(
+    val leftC: Float? = null,
+    val centerC: Float? = null,
+    val rightC: Float? = null,
+    val spreadC: Float? = null,
+    val hotspotRegion: Int = 0,
+) {
+    val hotspotRegionLabel: String
+        get() = when (hotspotRegion) {
+            1 -> "左侧"
+            2 -> "中心"
+            3 -> "右侧"
+            else -> "未知"
+        }
+}
+
+data class FusionEvidenceSummary(
+    val available: Boolean = false,
+    val presenceScoreX1000: Int = 0,
+    val presenceSourceCount: Int = 0,
+    val pressurePresenceX1000: Int = 0,
+    val visionPresenceX1000: Int = 0,
+    val thermalPresenceX1000: Int = 0,
+    val activityScoreX1000: Int = 0,
+    val airwayRiskX1000: Int = 0,
+    val edgeRiskX1000: Int = 0,
+    val thermalHotspot: ThermalHotspotEvidence = ThermalHotspotEvidence(),
+    val bedTemperature: BedTemperatureEvidence = BedTemperatureEvidence(),
+)
+
+data class FusionSummary(
+    val schemaVersion: Int = 1,
+    val evidenceSequence: Long = 0,
+    val legacyState: Int = 0,
+    val legacyLabel: String = "normal",
+    val legacyConfidence: Int = 0,
+    val legacySeverity: Int = 0,
+    val validSourceMask: Int? = null,
+    val contexts: Map<String, FusionContextSummary> = emptyMap(),
+    val alarm: FusionAlarmSummary = FusionAlarmSummary(),
+    val activeIncidents: List<FusionIncidentSummary> = emptyList(),
+    val evidence: FusionEvidenceSummary = FusionEvidenceSummary(),
+) {
+    val thermalEvidenceAvailable: Boolean
+        get() = sourceAvailable(1 shl 1)
+
+    val bedTemperatureEvidenceAvailable: Boolean
+        get() = sourceAvailable(1 shl 2)
+
+    val pressureEvidenceAvailable: Boolean
+        get() = sourceAvailable(1 shl 3)
+
+    val visionEvidenceAvailable: Boolean
+        get() = sourceAvailable(1 shl 4)
+
+    private fun sourceAvailable(sourceBit: Int): Boolean =
+        validSourceMask?.let { it and sourceBit != 0 } ?: evidence.available
 }
 
 data class AudioPlayerSummary(
@@ -112,6 +305,15 @@ data class AudioPlayerSummary(
 
     val isPaused: Boolean
         get() = status == 7
+}
+
+data class RelayActuatorSummary(
+    val status: Int = 0,
+    val on: Boolean = false,
+    val pin: Int? = null,
+) {
+    val ready: Boolean
+        get() = status == 1
 }
 
 data class VisionOverlayBox(
@@ -144,10 +346,14 @@ data class MonitorSnapshot(
     val scd41: Scd41Summary = Scd41Summary(),
     val bme688: Bme688Summary = Bme688Summary(),
     val inference: InferenceSummary = InferenceSummary(),
+    val fusion: FusionSummary = FusionSummary(),
+    val storyTransfer: StoryTransferSummary = StoryTransferSummary(),
     val diagnosticsOverall: String = "offline",
     val videoAvailable: Boolean = false,
     val audioAvailable: Boolean = false,
     val audioPlayer: AudioPlayerSummary = AudioPlayerSummary(),
+    val warmLight: RelayActuatorSummary = RelayActuatorSummary(),
+    val soother: RelayActuatorSummary = RelayActuatorSummary(),
     val visionOverlay: VisionOverlaySummary = VisionOverlaySummary(),
 )
 
@@ -210,16 +416,43 @@ data class SafetyEvent(
     val receivedAt: String,
     val acknowledged: Boolean,
     val payload: JSONObject? = null,
+    val incidentId: Long? = null,
+    val type: Int? = null,
+    val action: Int? = null,
+    val lifecycle: Int? = null,
+    val level: Int? = null,
+    val globalLevel: Int? = null,
 ) {
+    val isRecoveryOrResolved: Boolean
+        get() = lifecycle == 4 || lifecycle == 5 || action == 4
+
+    val requiresAttention: Boolean
+        get() = !acknowledged && severity > 0 && !isRecoveryOrResolved
+
+    val lifecycleStatusLabel: String
+        get() = when {
+            action == 4 || lifecycle == 5 -> "已解除"
+            lifecycle == 4 -> "恢复确认中"
+            lifecycle == 3 || action == 3 -> "已升级"
+            lifecycle == 2 -> "进行中"
+            acknowledged -> "已确认"
+            else -> "待确认"
+        }
+
     val title: String
         get() {
+            type?.takeIf { it != 0 }?.let { return incidentTypeLabel(it) }
             val numericState = state.toIntOrNull()
             return if (numericState != null) safetyStateLabel(numericState)
             else eventType.replace('_', ' ').ifBlank { "安全事件" }
         }
 
     val detail: String
-        get() = "严重度 $severity · 置信度 ${"%.1f".format(confidence)}%"
+        get() = buildString {
+            level?.let { append("L${it.coerceIn(0, 3)} · ") }
+            append(lifecycleStatusLabel)
+            append(" · 置信度 ${"%.1f".format(confidence)}%")
+        }
 }
 
 data class MobileCommandStatus(
@@ -234,7 +467,20 @@ data class MonitorRepositoryState(
     val capabilities: MobileCapabilities = MobileCapabilities(),
     val connectionStatus: ServerConnectionStatus = ServerConnectionStatus.NotConfigured,
     val snapshot: MonitorSnapshot = MonitorSnapshot(),
+    val network: NetworkHealth = NetworkHealth(),
+    val usingCachedData: Boolean = false,
     val errorMessage: String? = null,
+)
+
+data class TrendSample(
+    val timestampMs: Long,
+    val temperatureC: Float?,
+    val humidityPercent: Float?,
+    val co2Ppm: Int?,
+    val cryConfidence: Float,
+    val severity: Int,
+    val safetyState: Int,
+    val occupied: Boolean?,
 )
 
 data class VideoStreamState(
@@ -246,6 +492,10 @@ data class VideoStreamState(
     val quality: Int = 0,
     val frameCount: Long = 0,
     val gapCount: Long = 0,
+    val droppedByClient: Long = 0,
+    val lastFrameAtMs: Long? = null,
+    val stale: Boolean = true,
+    val reconnectAttempt: Int = 0,
     val frameBytes: ByteArray? = null,
     val errorMessage: String? = null,
 )
@@ -256,6 +506,9 @@ data class AudioStreamState(
     val receiving: Boolean = false,
     val muted: Boolean = false,
     val sequence: Long = 0,
+    val lastFrameAtMs: Long? = null,
+    val stale: Boolean = true,
+    val reconnectAttempt: Int = 0,
     val errorMessage: String? = null,
 )
 
@@ -401,12 +654,16 @@ object MobileProtocolParser {
         val bedTemperature = sensors.objectOrNull("bed_temperature")
         val thermal = sensors.objectOrNull("thermal")
         val inference = telemetry.objectOrNull("inference") ?: JSONObject()
+        val fusion = parseFusionSummary(root.objectOrNull("fusion"), inference)
         val environment = sensors.objectOrNull("environment")
         val bme688 = environment?.objectOrNull("bme688")
             ?: sensors.objectOrNull("bme688")
         val pressureSensor = sensors.objectOrNull("pressure")
+        val gateway = telemetry.objectOrNull("health")?.objectOrNull("gateway")
         val media = root.objectOrNull("media") ?: JSONObject()
         val audioPlayer = sensors.objectOrNull("audio_player") ?: JSONObject()
+        val warmLight = sensors.objectOrNull("warm_light") ?: JSONObject()
+        val soother = sensors.objectOrNull("soother") ?: JSONObject()
         val visionOverlay = root.objectOrNull("vision_overlay")
         val capabilities = device.optJSONArray("capabilities")
         val pressureMatrix = root.objectOrNull("matrices")?.objectOrNull("pressure")
@@ -468,7 +725,11 @@ object MobileProtocolParser {
                     ?: 0f,
                 severity = inference.optInt("severity", 0).coerceIn(0, 5),
                 faults = faults,
+                cryConfidence = parseCryConfidence(inference),
+                occupied = inference.opt("occupied")?.let(::booleanFromAny),
             ),
+            fusion = fusion,
+            storyTransfer = parseStoryTransfer(gateway),
             diagnosticsOverall = root.objectOrNull("diagnostics")?.optString("overall", "offline")
                 ?: when {
                     !online -> "offline"
@@ -486,6 +747,8 @@ object MobileProtocolParser {
                 volume = audioPlayer.optInt("vol", 0),
                 file = audioPlayer.optString("file"),
             ),
+            warmLight = parseRelayActuator(warmLight),
+            soother = parseRelayActuator(soother),
             visionOverlay = parseVisionOverlay(visionOverlay),
         )
     }
@@ -502,11 +765,17 @@ object MobileProtocolParser {
         for (index in 0 until valuesJson.length()) {
             values += valuesJson.optInt(index)
         }
+        val rows = matrix.optInt("rows")
+        val cols = matrix.optInt("cols")
+        require(rows in 1..128 && cols in 1..128) { "矩阵尺寸无效：${rows}×${cols}" }
+        require(values.isEmpty() || values.size == rows * cols) {
+            "矩阵数据长度 ${values.size} 与 ${rows}×${cols} 不一致"
+        }
         return MatrixFrame(
             kind = matrix.optString("kind"),
             sequence = matrix.optLong("sequence"),
-            rows = matrix.optInt("rows"),
-            cols = matrix.optInt("cols"),
+            rows = rows,
+            cols = cols,
             unit = matrix.optString("unit"),
             receivedAt = matrix.optString("received_at"),
             minimum = matrix.numberOrNull("minimum")?.toInt()
@@ -611,17 +880,44 @@ object MobileProtocolParser {
     }
 
     private fun parseEventObject(event: JSONObject): SafetyEvent {
+        val payload = event.objectOrNull("payload")
+            ?: event.objectOrNull("payload_json")
+            ?: event.optString("payload_json")
+                .takeIf { it.trimStart().startsWith("{") }
+                ?.let { encoded -> runCatching { JSONObject(encoded) }.getOrNull() }
+        val structured = payload?.objectOrNull("payload") ?: payload
+
+        fun structuredNumber(vararg names: String): Number? {
+            for (name in names) {
+                structured.numberOrNull(name)?.let { return it }
+                payload.numberOrNull(name)?.let { return it }
+                event.numberOrNull(name)?.let { return it }
+            }
+            return null
+        }
+
+        val state = event.opt("state")?.toString()?.takeIf(String::isNotBlank)
+            ?: structured?.opt("state")?.toString().orEmpty()
         return SafetyEvent(
             id = event.optLong("id"),
             sourceEventId = event.numberOrNull("source_event_id")?.toLong()
                 ?: event.numberOrNull("event_id")?.toLong(),
             eventType = event.optString("event_type", "ra8_safety"),
-            state = event.opt("state")?.toString().orEmpty(),
-            severity = event.optInt("severity", 0).coerceIn(0, 5),
-            confidence = event.numberOrNull("confidence")?.toFloat() ?: 0f,
+            state = state,
+            severity = (event.numberOrNull("severity") ?: structured.numberOrNull("severity"))
+                ?.toInt()?.coerceIn(0, 5) ?: 0,
+            confidence = (event.numberOrNull("confidence")
+                ?: structured.numberOrNull("confidence"))
+                ?.toFloat()?.coerceIn(0f, 100f) ?: 0f,
             receivedAt = event.optString("received_at"),
             acknowledged = event.booleanValue("acknowledged"),
-            payload = event.objectOrNull("payload") ?: event.objectOrNull("payload_json"),
+            payload = payload,
+            incidentId = structuredNumber("incident", "incident_id")?.toLong(),
+            type = structuredNumber("type")?.toInt(),
+            action = structuredNumber("action")?.toInt(),
+            lifecycle = structuredNumber("lifecycle")?.toInt(),
+            level = structuredNumber("level")?.toInt(),
+            globalLevel = structuredNumber("global_level")?.toInt(),
         )
     }
 
@@ -651,6 +947,13 @@ object MobileProtocolParser {
         acknowledged = advisory.booleanValue("acknowledged"),
         createdAt = advisory.optString("created_at"),
     )
+
+    private fun parseRelayActuator(actuator: JSONObject): RelayActuatorSummary =
+        RelayActuatorSummary(
+            status = actuator.optInt("s", 0),
+            on = actuator.booleanValue("on"),
+            pin = actuator.numberOrNull("pin")?.toInt(),
+        )
 
     private fun parseScd41(environment: JSONObject?, runtimeTick: Long?): Scd41Summary {
         if (environment == null) return Scd41Summary()
@@ -708,6 +1011,231 @@ object MobileProtocolParser {
             rawGasKohm = gasOhm?.takeIf { it in 1..0xFFFF_FFFFL }?.div(1000f),
             sampleAgeMs = age,
             errorCount = bme.optInt("err", 0),
+        )
+    }
+
+    private fun parseFusionSummary(
+        normalized: JSONObject?,
+        inference: JSONObject,
+    ): FusionSummary {
+        val parsed = if (normalized != null) {
+            parseNormalizedFusion(normalized)
+        } else {
+            parseRawFusion(inference)
+        }
+        return parsed.copy(validSourceMask = inference.numberOrNull("valid")?.toInt())
+    }
+
+    private fun parseNormalizedFusion(fusion: JSONObject): FusionSummary {
+        val legacy = fusion.objectOrNull("legacy") ?: JSONObject()
+        val contextsJson = fusion.objectOrNull("contexts")
+        val contexts = buildMap {
+            val keys = contextsJson?.keys() ?: return@buildMap
+            while (keys.hasNext()) {
+                val name = keys.next()
+                val raw = contextsJson.objectOrNull(name) ?: continue
+                put(
+                    name,
+                    FusionContextSummary(
+                        code = raw.optInt("code", 0),
+                        label = raw.optString("label", "unknown").ifBlank { "unknown" },
+                    ),
+                )
+            }
+        }
+        val alarmJson = fusion.objectOrNull("alarm") ?: JSONObject()
+        val alarmLevel = alarmJson.optInt("level", 0).coerceIn(0, 3)
+        val incidentsJson = fusion.optJSONArray("active_incidents")
+        val activeIncidents = buildList {
+            if (incidentsJson == null) return@buildList
+            for (index in 0 until incidentsJson.length()) {
+                val raw = incidentsJson.optJSONObject(index) ?: continue
+                val type = raw.optInt("type", 0).coerceAtLeast(0)
+                val lifecycle = raw.optInt("lifecycle", 0).coerceAtLeast(0)
+                add(
+                    FusionIncidentSummary(
+                        type = type,
+                        typeLabel = raw.optString("type_label", incidentTypeKey(type))
+                            .ifBlank { incidentTypeKey(type) },
+                        lifecycle = lifecycle,
+                        lifecycleLabel = raw.optString(
+                            "lifecycle_label",
+                            incidentLifecycleKey(lifecycle),
+                        ).ifBlank { incidentLifecycleKey(lifecycle) },
+                        level = raw.optInt("level", 0).coerceIn(0, 3),
+                        severity = raw.optInt("severity", 0).coerceIn(0, 5),
+                        confidence = raw.optInt("confidence", 0).coerceIn(0, 100),
+                        sourceMask = raw.optInt("source_mask", 0).coerceAtLeast(0),
+                        incidentId = raw.optLong("incident_id", 0L).coerceAtLeast(0L),
+                        sinceTick = raw.optLong("since_tick", 0L).coerceAtLeast(0L),
+                    ),
+                )
+            }
+        }
+        val legacyState = legacy.optInt("state", 0)
+        return FusionSummary(
+            schemaVersion = fusion.optInt("schema_version", 1).coerceAtLeast(1),
+            evidenceSequence = fusion.optLong("evidence_sequence", 0L).coerceAtLeast(0L),
+            legacyState = legacyState,
+            legacyLabel = legacy.optString("label", legacyStateKey(legacyState))
+                .ifBlank { legacyStateKey(legacyState) },
+            legacyConfidence = legacy.optInt("confidence", 0).coerceIn(0, 100),
+            legacySeverity = legacy.optInt("severity", 0).coerceIn(0, 5),
+            contexts = contexts,
+            alarm = FusionAlarmSummary(
+                level = alarmLevel,
+                label = alarmJson.optString("label", alarmLevelKey(alarmLevel))
+                    .ifBlank { alarmLevelKey(alarmLevel) },
+                primaryType = alarmJson.optInt("primary_type", 0).coerceAtLeast(0),
+                primaryLabel = alarmJson.optString(
+                    "primary_label",
+                    incidentTypeKey(alarmJson.optInt("primary_type", 0)),
+                ).ifBlank { incidentTypeKey(alarmJson.optInt("primary_type", 0)) },
+                primaryIncidentId = alarmJson.optLong("primary_incident_id", 0L)
+                    .coerceAtLeast(0L),
+                primaryLifecycle = alarmJson.optInt("primary_lifecycle", 0).coerceAtLeast(0),
+                activeCount = alarmJson.optInt("active_count", activeIncidents.size)
+                    .coerceAtLeast(0),
+            ),
+            activeIncidents = activeIncidents,
+            evidence = parseNormalizedEvidence(fusion.objectOrNull("evidence")),
+        )
+    }
+
+    private fun parseNormalizedEvidence(raw: JSONObject?): FusionEvidenceSummary {
+        if (raw?.booleanValue("available") != true) return FusionEvidenceSummary()
+        val hotspot = raw.objectOrNull("thermal_hotspot") ?: JSONObject()
+        val bed = raw.objectOrNull("bed_temperature") ?: JSONObject()
+        return FusionEvidenceSummary(
+            available = true,
+            presenceScoreX1000 = raw.x1000("presence_score_x1000"),
+            presenceSourceCount = raw.optInt("presence_source_count", 0).coerceIn(0, 3),
+            pressurePresenceX1000 = raw.x1000("pressure_presence_x1000"),
+            visionPresenceX1000 = raw.x1000("vision_presence_x1000"),
+            thermalPresenceX1000 = raw.x1000("thermal_presence_x1000"),
+            activityScoreX1000 = raw.x1000("activity_score_x1000"),
+            airwayRiskX1000 = raw.x1000("airway_risk_x1000"),
+            edgeRiskX1000 = raw.x1000("edge_risk_x1000"),
+            thermalHotspot = ThermalHotspotEvidence(
+                points = hotspot.optInt("points", 0).coerceAtLeast(0),
+                xX1000 = hotspot.x1000("x_x1000"),
+                yX1000 = hotspot.x1000("y_x1000"),
+                // Fusion keeps the legacy `mean_cdeg` field name, but the wire value
+                // is explicitly deci-Celsius (0.1 °C), not centi-Celsius.
+                meanC = hotspot.numberOrNull("mean_cdeg")?.toFloat()?.div(10f),
+            ),
+            bedTemperature = BedTemperatureEvidence(
+                leftC = bed.numberOrNull("left_milli_c")?.toFloat()?.div(1000f),
+                centerC = bed.numberOrNull("center_milli_c")?.toFloat()?.div(1000f),
+                rightC = bed.numberOrNull("right_milli_c")?.toFloat()?.div(1000f),
+                spreadC = bed.numberOrNull("spread_milli_c")?.toFloat()?.div(1000f),
+                hotspotRegion = bed.optInt("hotspot_region", 0).coerceIn(0, 3),
+            ),
+        )
+    }
+
+    private fun parseRawFusion(inference: JSONObject): FusionSummary {
+        val legacyState = inference.optInt("state", 0)
+        val legacySeverity = inference.optInt("severity", 0).coerceIn(0, 5)
+        val contextValues = inference.optJSONArray("ctx")
+        val contexts = buildMap {
+            if (contextValues == null) return@buildMap
+            val count = minOf(contextValues.length(), RAW_CONTEXT_NAMES.size)
+            for (index in 0 until count) {
+                val code = contextValues.optInt(index, 0)
+                put(
+                    RAW_CONTEXT_NAMES[index],
+                    FusionContextSummary(code, rawContextLabel(index, code)),
+                )
+            }
+        }
+        val incidentValues = inference.optJSONArray("ai")
+        val activeIncidents = buildList {
+            if (incidentValues == null) return@buildList
+            for (index in 0 until incidentValues.length()) {
+                val raw = incidentValues.optJSONArray(index) ?: continue
+                if (raw.length() < 8) continue
+                val type = raw.optInt(0, 0).coerceAtLeast(0)
+                val lifecycle = raw.optInt(1, 0).coerceAtLeast(0)
+                add(
+                    FusionIncidentSummary(
+                        type = type,
+                        typeLabel = incidentTypeKey(type),
+                        lifecycle = lifecycle,
+                        lifecycleLabel = incidentLifecycleKey(lifecycle),
+                        level = raw.optInt(2, 0).coerceIn(0, 3),
+                        severity = raw.optInt(3, 0).coerceIn(0, 5),
+                        confidence = raw.optInt(4, 0).coerceIn(0, 100),
+                        sourceMask = raw.optInt(5, 0).coerceAtLeast(0),
+                        incidentId = raw.optLong(6, 0L).coerceAtLeast(0L),
+                        sinceTick = raw.optLong(7, 0L).coerceAtLeast(0L),
+                    ),
+                )
+            }
+        }
+        val alarmValues = inference.optJSONArray("alarm")
+        val fallbackLevel = when (legacySeverity) {
+            0 -> 0
+            1 -> 1
+            in 2..3 -> 2
+            else -> 3
+        }
+        val alarmLevel = alarmValues.numberOrNull(0)?.toInt()?.coerceIn(0, 3)
+            ?: fallbackLevel
+        val primaryType = alarmValues.numberOrNull(1)?.toInt()?.coerceAtLeast(0) ?: 0
+        return FusionSummary(
+            schemaVersion = inference.optInt("sv", 1).coerceAtLeast(1),
+            evidenceSequence = inference.optLong("ev", 0L).coerceAtLeast(0L),
+            legacyState = legacyState,
+            legacyLabel = legacyStateKey(legacyState),
+            legacyConfidence = (
+                inference.numberOrNull("conf")
+                    ?: inference.numberOrNull("confidence")
+                )?.toInt()?.coerceIn(0, 100) ?: 0,
+            legacySeverity = legacySeverity,
+            validSourceMask = inference.numberOrNull("valid")?.toInt(),
+            contexts = contexts,
+            alarm = FusionAlarmSummary(
+                level = alarmLevel,
+                label = alarmLevelKey(alarmLevel),
+                primaryType = primaryType,
+                primaryLabel = incidentTypeKey(primaryType),
+                primaryIncidentId = alarmValues.numberOrNull(2)?.toLong()?.coerceAtLeast(0L) ?: 0L,
+                primaryLifecycle = alarmValues.numberOrNull(3)?.toInt()?.coerceAtLeast(0) ?: 0,
+                activeCount = alarmValues.numberOrNull(4)?.toInt()?.coerceAtLeast(0)
+                    ?: activeIncidents.size,
+            ),
+            activeIncidents = activeIncidents,
+            evidence = parseRawEvidence(inference.optJSONArray("ex")),
+        )
+    }
+
+    private fun parseRawEvidence(raw: JSONArray?): FusionEvidenceSummary {
+        if (raw == null || raw.length() < 17) return FusionEvidenceSummary()
+        return FusionEvidenceSummary(
+            available = true,
+            presenceScoreX1000 = raw.x1000(0),
+            presenceSourceCount = raw.optInt(1, 0).coerceIn(0, 3),
+            pressurePresenceX1000 = raw.x1000(2),
+            visionPresenceX1000 = raw.x1000(3),
+            thermalPresenceX1000 = raw.x1000(4),
+            activityScoreX1000 = raw.x1000(5),
+            airwayRiskX1000 = raw.x1000(6),
+            edgeRiskX1000 = raw.x1000(7),
+            thermalHotspot = ThermalHotspotEvidence(
+                points = raw.optInt(8, 0).coerceAtLeast(0),
+                xX1000 = raw.x1000(9),
+                yX1000 = raw.x1000(10),
+                // ex[11] is deci-Celsius in every supported 17+ evidence array.
+                meanC = raw.numberOrNull(11)?.toFloat()?.div(10f),
+            ),
+            bedTemperature = BedTemperatureEvidence(
+                leftC = raw.numberOrNull(12)?.toFloat()?.div(1000f),
+                centerC = raw.numberOrNull(13)?.toFloat()?.div(1000f),
+                rightC = raw.numberOrNull(14)?.toFloat()?.div(1000f),
+                spreadC = raw.numberOrNull(15)?.toFloat()?.div(1000f),
+                hotspotRegion = raw.optInt(16, 0).coerceIn(0, 3),
+            ),
         )
     }
 
@@ -790,8 +1318,139 @@ fun safetyStateLabel(state: Int): String = when (state) {
     9 -> "宝宝活动中"
     10 -> "宝宝睡眠中"
     11 -> "宝宝清醒"
+    12 -> "空气质量需关注"
+    13 -> "疑似发热"
     255 -> "安全告警测试"
     else -> "未知状态 $state"
+}
+
+fun incidentTypeLabel(type: Int): String = when (type) {
+    0 -> "无告警"
+    1 -> "在床证据冲突"
+    2 -> "传感器降级"
+    3 -> "监护盲区"
+    4 -> "口鼻不可见"
+    5 -> "口鼻部分遮挡"
+    6 -> "口鼻遮挡"
+    7 -> "接近床缘"
+    8 -> "攀爬床缘"
+    9 -> "宝宝离床"
+    10 -> "检测到哭声"
+    11 -> "持续哭声"
+    12 -> "温度过高"
+    13 -> "温度偏低"
+    14 -> "摄像头冻结"
+    15 -> "空气质量异常"
+    16 -> "疑似发热"
+    else -> "未知告警 $type"
+}
+
+private val RAW_CONTEXT_NAMES = listOf(
+    "presence",
+    "arousal",
+    "bed_motion",
+    "airway_view",
+    "edge_state",
+    "distress",
+    "cry_cause_hint",
+    "body_temperature",
+    "bed_thermal",
+    "caregiver",
+    "system_health",
+)
+
+private val RAW_CONTEXT_LABELS = listOf(
+    listOf("unknown", "present", "absent", "uncertain"),
+    listOf("unknown", "sleeping", "awake", "transition"),
+    listOf("unknown", "quiet", "rolling", "active"),
+    listOf("unknown", "clear", "partial", "covered", "not_visible"),
+    listOf("unknown", "center", "near", "grab", "outside"),
+    listOf("unknown", "none", "crying", "persistent_cry"),
+    listOf("unknown", "hungry", "belly_pain", "discomfort", "tired", "burping"),
+    listOf("unknown", "normal", "high", "low"),
+    listOf("unknown", "normal", "high", "low"),
+    listOf("unknown", "absent", "present"),
+    listOf("ok", "degraded", "blind"),
+)
+
+private fun rawContextLabel(index: Int, code: Int): String {
+    return RAW_CONTEXT_LABELS.getOrNull(index)?.getOrNull(code) ?: "unknown_$code"
+}
+
+private fun alarmLevelKey(level: Int): String = when (level) {
+    0 -> "normal"
+    in 1..3 -> "L$level"
+    else -> "L$level"
+}
+
+private fun legacyStateKey(state: Int): String = when (state) {
+    0 -> "normal"
+    1 -> "near_edge"
+    2 -> "out_of_bed"
+    3 -> "overheat"
+    4 -> "underheat"
+    5 -> "sensor_fault"
+    6 -> "crying"
+    7 -> "face_covered"
+    8 -> "standing"
+    9 -> "moving"
+    10 -> "sleeping"
+    11 -> "awake"
+    12 -> "air_quality"
+    13 -> "suspected_fever"
+    else -> "state_$state"
+}
+
+private fun incidentTypeKey(type: Int): String = when (type) {
+    0 -> "none"
+    1 -> "presence_conflict"
+    2 -> "sensor_degraded"
+    3 -> "monitor_blind"
+    4 -> "airway_not_visible"
+    5 -> "airway_partial"
+    6 -> "airway_covered"
+    7 -> "edge_near"
+    8 -> "edge_climbing"
+    9 -> "out_of_bed"
+    10 -> "cry"
+    11 -> "persistent_cry"
+    12 -> "overheat"
+    13 -> "underheat"
+    14 -> "camera_frozen"
+    15 -> "environment_air"
+    16 -> "suspected_fever"
+    else -> "incident_$type"
+}
+
+private fun incidentLifecycleKey(lifecycle: Int): String = when (lifecycle) {
+    0 -> "clear"
+    1 -> "candidate"
+    2 -> "active"
+    3 -> "escalated"
+    4 -> "recovery_hold"
+    5 -> "resolved"
+    else -> "lifecycle_$lifecycle"
+}
+
+private fun parseStoryTransfer(gateway: JSONObject?): StoryTransferSummary {
+    val audioTransportSuspended = gateway?.booleanValue("audio_transport_suspended") == true
+    val videoTransportSuspended = gateway?.booleanValue("video_transport_suspended") == true
+    val active = if (gateway?.has("story_active") == true) {
+        gateway.booleanValue("story_active")
+    } else {
+        audioTransportSuspended || videoTransportSuspended
+    }
+    return StoryTransferSummary(
+        active = active,
+        exchangeRetries = gateway.numberOrNull("story_exchange_retries")?.toLong() ?: 0L,
+        exchangeTimeouts = gateway.numberOrNull("story_exchange_timeouts")?.toLong() ?: 0L,
+        downloadError = gateway.numberOrNull("story_download_error")?.toInt() ?: 0,
+        httpStatus = gateway.numberOrNull("story_http_status")?.toInt() ?: 0,
+        receivedBytes = gateway.numberOrNull("story_received_bytes")?.toLong() ?: 0L,
+        mediaSuspendFailures = gateway.numberOrNull("story_media_suspend_failures")?.toLong() ?: 0L,
+        audioTransportSuspended = audioTransportSuspended,
+        videoTransportSuspended = videoTransportSuspended,
+    )
 }
 
 private fun JSONObject.objectOrNull(name: String): JSONObject? = opt(name) as? JSONObject
@@ -801,6 +1460,14 @@ private fun JSONObject?.numberOrNull(name: String): Number? = this?.opt(name) as
 private fun JSONArray?.numberOrNull(index: Int): Number? {
     if (this == null || index !in 0 until length()) return null
     return opt(index) as? Number
+}
+
+private fun JSONObject.x1000(name: String): Int {
+    return numberOrNull(name)?.toInt()?.coerceIn(0, 1000) ?: 0
+}
+
+private fun JSONArray.x1000(index: Int): Int {
+    return numberOrNull(index)?.toInt()?.coerceIn(0, 1000) ?: 0
 }
 
 private fun JSONArray?.containsAny(vararg candidates: String): Boolean {
@@ -846,4 +1513,10 @@ private fun booleanFromAny(value: Any?): Boolean = when (value) {
 private fun tickAgeMs(now: Long?, then: Long?): Long? {
     if (now == null || then == null || then <= 0L) return null
     return if (now >= then) now - then else (0x1_0000_0000L - then) + now
+}
+
+private fun parseCryConfidence(inference: JSONObject): Float {
+    inference.numberOrNull("cry")?.let { return it.toFloat().coerceIn(0f, 100f) }
+    return (inference.numberOrNull("cry_raw")?.toFloat()?.div(10f) ?: 0f)
+        .coerceIn(0f, 100f)
 }

@@ -4,6 +4,7 @@ import android.content.Context
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.core.content.edit
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -13,57 +14,146 @@ import javax.crypto.spec.GCMParameterSpec
 internal class ServerCredentialStore(context: Context) {
     private val preferences = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
 
-    fun load(): ServerCredentials {
-        val baseUrl = preferences.getString(KEY_BASE_URL, DEFAULT_SERVER_URL)
-            ?.trim()
-            ?.trimEnd('/')
+    init {
+        migrateLegacyCloudProfile()
+    }
+
+    fun activeMode(): ServerEndpointMode = when (
+        preferences.getString(KEY_ACTIVE_MODE, null)?.lowercase()
+    ) {
+        MODE_LOCAL -> ServerEndpointMode.Local
+        else -> ServerEndpointMode.Cloud
+    }
+
+    fun setActiveMode(mode: ServerEndpointMode) {
+        preferences.edit { putString(KEY_ACTIVE_MODE, mode.preferenceValue) }
+    }
+
+    fun load(): ServerCredentials = load(activeMode())
+
+    fun load(mode: ServerEndpointMode): ServerCredentials {
+        val keys = keysFor(mode)
+        val baseUrl = preferences.getString(keys.baseUrl, mode.defaultUrl)
+            ?.let(::normalizeServerUrl)
             .orEmpty()
-            .ifBlank { DEFAULT_SERVER_URL }
-        val username = preferences.getString(KEY_USERNAME, "").orEmpty()
-        val password = decryptPassword()
+            .ifBlank { mode.defaultUrl }
         return ServerCredentials(
             baseUrl = baseUrl,
             deviceId = FIXED_DEVICE_ID,
-            username = username,
-            password = password,
+            username = preferences.getString(keys.username, "").orEmpty(),
+            password = decryptPassword(keys),
+            mode = mode,
         )
     }
 
-    fun view(): ServerConfigurationView {
-        val credentials = load()
+    fun view(): ServerConfigurationView = view(activeMode())
+
+    /**
+     * Returns both saved profiles while projecting [mode] through the legacy convenience fields.
+     * [ServerConfigurationView.activeMode] always reports the persisted active profile.
+     */
+    fun view(mode: ServerEndpointMode): ServerConfigurationView {
+        val cloudCredentials = load(ServerEndpointMode.Cloud)
+        val localCredentials = load(ServerEndpointMode.Local)
+        val selected = when (mode) {
+            ServerEndpointMode.Cloud -> cloudCredentials
+            ServerEndpointMode.Local -> localCredentials
+        }
         return ServerConfigurationView(
-            baseUrl = credentials.baseUrl,
-            deviceId = credentials.deviceId,
-            username = credentials.username,
-            hasPassword = credentials.password.isNotBlank(),
+            baseUrl = selected.baseUrl,
+            deviceId = selected.deviceId,
+            username = selected.username,
+            hasPassword = selected.password.isNotBlank(),
+            activeMode = activeMode(),
+            cloud = cloudCredentials.toView(),
+            local = localCredentials.toView(),
         )
     }
 
     fun save(baseUrl: String, username: String, newPassword: String?) {
-        val normalizedUrl = baseUrl.trim().trimEnd('/')
-        val editor = preferences.edit()
-            .putString(KEY_BASE_URL, normalizedUrl)
-            .putString(KEY_USERNAME, username.trim())
-        if (!newPassword.isNullOrEmpty()) {
-            val encrypted = encrypt(newPassword)
-            editor
-                .putString(KEY_PASSWORD_CIPHERTEXT, encrypted.ciphertext)
-                .putString(KEY_PASSWORD_IV, encrypted.iv)
-        }
-        editor.apply()
+        save(activeMode(), baseUrl, username, newPassword)
     }
 
-    fun lastHandledEventId(): Long? {
-        return if (preferences.contains(KEY_LAST_HANDLED_EVENT_ID)) {
-            preferences.getLong(KEY_LAST_HANDLED_EVENT_ID, 0L)
-        } else {
-            null
+    fun save(
+        mode: ServerEndpointMode,
+        baseUrl: String,
+        username: String,
+        newPassword: String?,
+    ) {
+        val normalizedUrl = normalizeServerUrl(baseUrl)
+        require(isAllowedServerUrl(normalizedUrl, mode)) {
+            "Server URL is not allowed for $mode mode"
+        }
+        val keys = keysFor(mode)
+        val encrypted = newPassword?.takeIf(String::isNotEmpty)?.let(::encrypt)
+        preferences.edit {
+            putString(keys.baseUrl, normalizedUrl)
+            putString(keys.username, username.trim())
+            if (encrypted != null) {
+                putString(keys.passwordCiphertext, encrypted.ciphertext)
+                putString(keys.passwordIv, encrypted.iv)
+            } else if (newPassword != null) {
+                // null means "keep the saved password"; an explicit empty value clears it.
+                remove(keys.passwordCiphertext)
+                remove(keys.passwordIv)
+            }
         }
     }
 
-    fun setLastHandledEventId(id: Long) {
-        preferences.edit().putLong(KEY_LAST_HANDLED_EVENT_ID, id).apply()
+    fun lastHandledEventId(namespace: String): Long? {
+        val key = eventCursorKey(namespace)
+        if (preferences.contains(key)) return preferences.getLong(key, 0L)
+
+        // Releases predating per-origin cursors stored one global value. It belongs to the old
+        // configured cloud origin only; never copy it into a newly selected local Plan B profile.
+        val legacyCloudNamespace = "${load(ServerEndpointMode.Cloud).baseUrl}|$FIXED_DEVICE_ID"
+        if (namespace == legacyCloudNamespace && preferences.contains(KEY_LAST_HANDLED_EVENT_ID)) {
+            val legacyValue = preferences.getLong(KEY_LAST_HANDLED_EVENT_ID, 0L)
+            preferences.edit { putLong(key, legacyValue) }
+            return legacyValue
+        }
+        return null
     }
+
+    fun setLastHandledEventId(namespace: String, id: Long) {
+        preferences.edit { putLong(eventCursorKey(namespace), id) }
+    }
+
+    private fun eventCursorKey(namespace: String): String =
+        "${KEY_LAST_HANDLED_EVENT_ID}_${namespace.hashCode().toUInt().toString(16)}"
+
+    private fun migrateLegacyCloudProfile() {
+        val cloudKeys = keysFor(ServerEndpointMode.Cloud)
+        preferences.edit {
+            if (!preferences.contains(cloudKeys.baseUrl) && preferences.contains(KEY_BASE_URL)) {
+                putString(cloudKeys.baseUrl, preferences.getString(KEY_BASE_URL, DEFAULT_SERVER_URL))
+            }
+            if (!preferences.contains(cloudKeys.username) && preferences.contains(KEY_USERNAME)) {
+                putString(cloudKeys.username, preferences.getString(KEY_USERNAME, ""))
+            }
+            if (
+                !preferences.contains(cloudKeys.passwordCiphertext) &&
+                preferences.contains(KEY_PASSWORD_CIPHERTEXT)
+            ) {
+                putString(
+                    cloudKeys.passwordCiphertext,
+                    preferences.getString(KEY_PASSWORD_CIPHERTEXT, null),
+                )
+            }
+            if (
+                !preferences.contains(cloudKeys.passwordIv) &&
+                preferences.contains(KEY_PASSWORD_IV)
+            ) {
+                putString(cloudKeys.passwordIv, preferences.getString(KEY_PASSWORD_IV, null))
+            }
+        }
+    }
+
+    private fun ServerCredentials.toView(): ServerEndpointView = ServerEndpointView(
+        baseUrl = baseUrl,
+        username = username,
+        hasPassword = password.isNotBlank(),
+    )
 
     private fun encrypt(plaintext: String): EncryptedValue {
         val cipher = Cipher.getInstance(TRANSFORMATION)
@@ -75,9 +165,9 @@ internal class ServerCredentialStore(context: Context) {
         )
     }
 
-    private fun decryptPassword(): String {
-        val ciphertextText = preferences.getString(KEY_PASSWORD_CIPHERTEXT, null) ?: return ""
-        val ivText = preferences.getString(KEY_PASSWORD_IV, null) ?: return ""
+    private fun decryptPassword(keys: ProfileKeys): String {
+        val ciphertextText = preferences.getString(keys.passwordCiphertext, null) ?: return ""
+        val ivText = preferences.getString(keys.passwordIv, null) ?: return ""
         return runCatching {
             val cipher = Cipher.getInstance(TRANSFORMATION)
             val iv = Base64.decode(ivText, Base64.NO_WRAP)
@@ -106,13 +196,60 @@ internal class ServerCredentialStore(context: Context) {
         }
     }
 
+    private data class ProfileKeys(
+        val baseUrl: String,
+        val username: String,
+        val passwordCiphertext: String,
+        val passwordIv: String,
+    )
+
     private data class EncryptedValue(
         val ciphertext: String,
         val iv: String,
     )
 
+    private val ServerEndpointMode.defaultUrl: String
+        get() = when (this) {
+            ServerEndpointMode.Cloud -> DEFAULT_SERVER_URL
+            ServerEndpointMode.Local -> DEFAULT_LOCAL_SERVER_URL
+        }
+
+    private val ServerEndpointMode.preferenceValue: String
+        get() = when (this) {
+            ServerEndpointMode.Cloud -> MODE_CLOUD
+            ServerEndpointMode.Local -> MODE_LOCAL
+        }
+
+    private fun keysFor(mode: ServerEndpointMode): ProfileKeys = when (mode) {
+        ServerEndpointMode.Cloud -> ProfileKeys(
+            baseUrl = KEY_CLOUD_BASE_URL,
+            username = KEY_CLOUD_USERNAME,
+            passwordCiphertext = KEY_CLOUD_PASSWORD_CIPHERTEXT,
+            passwordIv = KEY_CLOUD_PASSWORD_IV,
+        )
+        ServerEndpointMode.Local -> ProfileKeys(
+            baseUrl = KEY_LOCAL_BASE_URL,
+            username = KEY_LOCAL_USERNAME,
+            passwordCiphertext = KEY_LOCAL_PASSWORD_CIPHERTEXT,
+            passwordIv = KEY_LOCAL_PASSWORD_IV,
+        )
+    }
+
     private companion object {
         const val PREFERENCES_NAME = "mobile_server_settings"
+        const val KEY_ACTIVE_MODE = "active_endpoint_mode"
+        const val KEY_CLOUD_BASE_URL = "cloud_base_url"
+        const val KEY_CLOUD_USERNAME = "cloud_username"
+        const val KEY_CLOUD_PASSWORD_CIPHERTEXT = "cloud_password_ciphertext"
+        const val KEY_CLOUD_PASSWORD_IV = "cloud_password_iv"
+        const val KEY_LOCAL_BASE_URL = "local_base_url"
+        const val KEY_LOCAL_USERNAME = "local_username"
+        const val KEY_LOCAL_PASSWORD_CIPHERTEXT = "local_password_ciphertext"
+        const val KEY_LOCAL_PASSWORD_IV = "local_password_iv"
+        const val MODE_CLOUD = "cloud"
+        const val MODE_LOCAL = "local"
+
+        // Legacy single-profile keys. Keep read compatibility across in-place upgrades.
         const val KEY_BASE_URL = "base_url"
         const val KEY_USERNAME = "username"
         const val KEY_PASSWORD_CIPHERTEXT = "password_ciphertext"

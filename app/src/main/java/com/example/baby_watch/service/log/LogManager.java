@@ -28,11 +28,12 @@ public class LogManager {
         void onLogAdded();
     }
 
-    private static OnLogAddedListener logListener;
+    private static final Object LOCK = new Object();
+    private static volatile OnLogAddedListener logListener;
     private static final List<Entry> entries = new ArrayList<>();
     private static final int MAX = 200;
     private static final SimpleDateFormat sdf =
-            new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            new SimpleDateFormat("HH:mm:ss", Locale.ROOT);
 
     public static void setOnLogAddedListener(OnLogAddedListener l) {
         logListener = l;
@@ -64,22 +65,29 @@ public class LogManager {
     }
 
     private static void add(LogType type, String title, String detail) {
-        String now = sdf.format(new Date());
-        entries.add(0, new Entry(now, type, title, detail));
-        if (entries.size() > MAX) {
-            entries.remove(entries.size() - 1);
+        synchronized (LOCK) {
+            String now = sdf.format(new Date());
+            entries.add(0, new Entry(now, type, title, detail));
+            if (entries.size() > MAX) {
+                entries.remove(entries.size() - 1);
+            }
         }
-        if (logListener != null) logListener.onLogAdded();
+        OnLogAddedListener listener = logListener;
+        if (listener != null) listener.onLogAdded();
     }
 
     public static List<Entry> getAll() {
-        return new ArrayList<>(entries);
+        synchronized (LOCK) {
+            return new ArrayList<>(entries);
+        }
     }
 
     public static List<Entry> getByType(LogType type) {
         List<Entry> result = new ArrayList<>();
-        for (Entry e : entries) {
-            if (e.type == type) result.add(e);
+        synchronized (LOCK) {
+            for (Entry e : entries) {
+                if (e.type == type) result.add(e);
+            }
         }
         return result;
     }

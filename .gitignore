@@ -1,5 +1,6 @@
 *.iml
 .gradle
+/.kotlin
 /local.properties
 /.idea/caches
 /.idea/libraries
@@ -13,3 +14,24 @@
 .externalNativeBuild
 .cxx
 local.properties
+hs_err_pid*.log
+replay_pid*.log
+
+# Local editor settings and disposable investigation artifacts
+/.idea/
+/.vscode/
+/.planb-audit/
+/.latest-baby-monitor/
+/tmp/
+
+# Build outputs, signing material and local credentials
+**/build/
+*.apk
+*.aab
+*.jks
+*.keystore
+.env
+.env.*
+!.env.example
+keystore.properties
+secrets.properties

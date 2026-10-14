@@ -6,23 +6,20 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
-
 import androidx.core.app.NotificationCompat;
 
 public class phone_notice {
 
     private static final String CHANNEL_ID = "baby_watch_alert";
-    private static final int NOTIFY_ID = 1001;
+    private static final String GROUP_KEY = "baby_watch_safety_events";
 
-    public static void show(Context ctx, String title, String text) {
+    public static void show(Context ctx, long eventId, String title, String text) {
         NotificationManager nm = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID, "紧急告警", NotificationManager.IMPORTANCE_HIGH);
-            channel.setBypassDnd(true);
+                    CHANNEL_ID, "安全告警", NotificationManager.IMPORTANCE_HIGH);
+            channel.setDescription("宝宝监护设备上报的安全事件");
             nm.createNotificationChannel(channel);
         }
 
@@ -34,14 +31,16 @@ public class phone_notice {
                 .setSmallIcon(android.R.drawable.ic_dialog_alert)
                 .setContentTitle(title)
                 .setContentText(text)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
-                .setFullScreenIntent(pi, true)
+                .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+                .setGroup(GROUP_KEY)
+                .setContentIntent(pi)
                 .setAutoCancel(true)
                 .build();
 
-        nm.notify(NOTIFY_ID, notification);
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> nm.cancel(NOTIFY_ID), 4000);
+        int notificationId = 1000 + (int) Math.floorMod(eventId, 100000L);
+        nm.notify(notificationId, notification);
     }
 }

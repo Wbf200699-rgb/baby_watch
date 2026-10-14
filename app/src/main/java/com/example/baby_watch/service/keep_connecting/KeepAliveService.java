@@ -37,16 +37,32 @@ public class KeepAliveService extends Service {
         return null;
     }
 
+    /**
+     * Android 15+ limits the accumulated runtime of data-sync foreground services.
+     * Stop immediately inside the grace period instead of allowing the process to ANR.
+     */
+    @Override
+    public void onTimeout(int startId, int fgsType) {
+        stopMonitoring();
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public void onDestroy() {
         MobileServerRepository.INSTANCE.stop();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            stopForeground(STOP_FOREGROUND_REMOVE);
-        } else {
-            stopForeground(true);
-        }
+        removeForegroundNotification();
         super.onDestroy();
+    }
+
+    private void stopMonitoring() {
+        MobileServerRepository.INSTANCE.stop();
+        removeForegroundNotification();
+        stopSelf();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void removeForegroundNotification() {
+        stopForeground(STOP_FOREGROUND_REMOVE);
     }
 
     private Notification buildNotification() {

@@ -12,11 +12,12 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.baby_watch.ui.home.HomeScreen
+import com.example.baby_watch.ui.insights.InsightsScreen
+import com.example.baby_watch.ui.monitor.MonitorScreen
 import com.example.baby_watch.ui.navbar.BottomNavBar
 import com.example.baby_watch.ui.navbar.BottomNavTab
 import com.example.baby_watch.ui.sensors.SensorScreen
 import com.example.baby_watch.ui.settings.SettingsScreen
-import com.example.baby_watch.ui.things.LogScreen
 
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
@@ -27,16 +28,23 @@ fun MainScreen(modifier: Modifier = Modifier) {
         bottomBar = {
             BottomNavBar(
                 selectedTab = selectedTab,
-                onTabSelected = { selectedTab = it }
+                onTabSelected = { selectedTab = it },
             )
-        }
+        },
     ) { innerPadding ->
-        Box(modifier = Modifier.fillMaxSize().padding(innerPadding)) {
-            Crossfade(targetState = selectedTab, label = "pageTransition") { tab ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
+        ) {
+            Crossfade(targetState = selectedTab, label = "mainDestination") { tab ->
                 when (tab) {
-                    BottomNavTab.Home -> HomeScreen()
-                    BottomNavTab.Sensors -> SensorScreen()
-                    BottomNavTab.Log -> LogScreen()
+                    BottomNavTab.Home -> HomeScreen(
+                        onOpenMonitor = { selectedTab = BottomNavTab.Monitor },
+                    )
+                    BottomNavTab.Monitor -> MonitorScreen()
+                    BottomNavTab.Insights -> InsightsScreen()
+                    BottomNavTab.Data -> SensorScreen()
                     BottomNavTab.Settings -> SettingsScreen()
                 }
             }
