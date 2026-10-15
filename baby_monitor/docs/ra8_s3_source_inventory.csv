@@ -1,0 +1,674 @@
+﻿path,component,category,language,provenance,git_state,bytes,lines
+common/app_error.h,RA8 shared common,application-source,C/C++ header,project-authored,tracked-clean,590,33
+common/common_config.h,RA8 shared common,application-source,C/C++ header,project-authored,tracked-clean,599,29
+common/common_types.h,RA8 shared common,application-source,C/C++ header,project-authored,tracked-clean,547,32
+common/ipc_protocol.h,RA8 shared common,protocol/IPC,C/C++ header,project-authored,tracked-clean,1090,58
+common/system_state.h,RA8 shared common,application-source,C/C++ header,project-authored,tracked-clean,646,37
+common/uart_protocol.h,RA8 shared common,protocol/IPC,C/C++ header,project-authored,tracked-clean,1374,62
+firmware/esp32s3_gateway/CMakeLists.txt,ESP32-S3 gateway,configuration/build,CMake,project-authored,tracked-clean,117,4
+firmware/esp32s3_gateway/dependencies.lock,ESP32-S3 gateway,configuration/build,Dependency lock,tool-generated,tracked-clean,1322,45
+firmware/esp32s3_gateway/GATEWAY_PROTOCOL.md,ESP32-S3 gateway,documentation/protocol,Markdown,project-authored,tracked-clean,5133,116
+firmware/esp32s3_gateway/main/CMakeLists.txt,ESP32-S3 gateway,configuration/build,CMake,project-authored,tracked-clean,316,6
+firmware/esp32s3_gateway/main/gateway_main.c,ESP32-S3 gateway,application-source,C,project-authored,tracked-clean,49160,1207
+firmware/esp32s3_gateway/main/gateway_secrets.example.h,ESP32-S3 gateway,application-source,C/C++ header,project-authored,tracked-clean,258,9
+firmware/esp32s3_gateway/main/idf_component.yml,ESP32-S3 gateway,configuration/build,YAML,project-authored,tracked-clean,92,3
+firmware/esp32s3_gateway/main/media/camera_stream.c,ESP32-S3 gateway,application-source,C,project-authored,tracked-clean,12087,313
+firmware/esp32s3_gateway/main/media/camera_stream.h,ESP32-S3 gateway,application-source,C/C++ header,project-authored,tracked-clean,73,5
+firmware/esp32s3_gateway/main/media/media_protocol.c,ESP32-S3 gateway,protocol/IPC,C,project-authored,tracked-clean,1729,60
+firmware/esp32s3_gateway/main/media/media_protocol.h,ESP32-S3 gateway,protocol/IPC,C/C++ header,project-authored,tracked-clean,629,15
+firmware/esp32s3_gateway/main/media/mic_stream.c,ESP32-S3 gateway,application-source,C,project-authored,tracked-clean,8172,211
+firmware/esp32s3_gateway/main/media/mic_stream.h,ESP32-S3 gateway,application-source,C/C++ header,project-authored,tracked-clean,70,5
+firmware/esp32s3_gateway/partitions.csv,ESP32-S3 gateway,configuration/build,CSV,project-authored,tracked-clean,182,4
+firmware/esp32s3_gateway/README.md,ESP32-S3 gateway,documentation/protocol,Markdown,project-authored,tracked-clean,642,13
+firmware/esp32s3_gateway/sdkconfig.defaults,ESP32-S3 gateway,application-source,Text,project-authored,tracked-clean,444,13
+Multicore_top/solution.xml,RA8 solution,configuration/build,XML,project-authored,modified,50614,529
+Multicore_top_CPU0/configuration.xml,RA8 CPU0/M85,configuration/build,XML,project-authored,modified,95609,1117
+Multicore_top_CPU0/Multicore_top_CPU0 Debug_Flat.jlink,RA8 CPU0/M85,tool/script,J-Link command,project-authored,tracked-clean,868,46
+Multicore_top_CPU0/Multicore_top_CPU0 Debug_Flat.launch,RA8 CPU0/M85,configuration/build,XML/e2 studio launch,project-authored,tracked-clean,21904,222
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_armclang_a.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13876,392
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_clang_a.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13485,386
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_cp15.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13760,564
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_gcc_a.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6679,223
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_iccarm_a.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,16500,558
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/irq_ctrl.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8681,190
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_armclang.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21413,707
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_clang.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21408,708
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_compiler.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,9818,292
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_gcc.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,31177,1006
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_version.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1980,44
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_ca.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,141649,3000
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,42753,967
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0plus.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,51169,1103
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm1.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43802,992
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm23.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,116817,2253
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm3.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,115664,2045
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm33.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,184231,3245
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm35p.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,184243,3245
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm4.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,127521,2237
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm52.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,318645,4783
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm55.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,323871,4895
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm7.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,145208,2468
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm85.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,327332,4936
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc000.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,48087,1055
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc300.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,114700,2028
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/core_starmc1.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,197279,3614
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_cachel1.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13471,439
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_mpu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11731,273
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv81m_pac.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6035,203
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_mpu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,14399,421
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_pmu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,22872,335
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_armclang_m.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24434,818
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_clang_m.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24456,824
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_gcc_m.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21431,717
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_iccarm_m.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,31709,1043
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_tiarmclang_m.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43266,1451
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_armclang_r.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4887,161
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_clang_r.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4884,161
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_gcc_r.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4714,163
+Multicore_top_CPU0/ra/arm/CMSIS_6/CMSIS/Core/Include/tz_context.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2520,68
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/event_groups.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,36811,884
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/atomic.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13751,427
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/croutine.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,29306,762
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/deprecated_definitions.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7799,281
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/event_groups.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,37117,857
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/FreeRTOS.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,108855,3334
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/list.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25313,511
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/message_buffer.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,45829,967
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_prototypes.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,26541,389
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_wrappers.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18190,276
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/newlib-freertos.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2528,62
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/picolibc-freertos.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4533,91
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/portable.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11873,281
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/projdefs.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7489,138
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/queue.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,70783,1810
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/semphr.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,51456,1215
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/stack_macros.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8988,141
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/stream_buffer.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,59792,1280
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/task.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,167820,3774
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/include/timers.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,67133,1431
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/LICENSE.md,RA8 CPU0/M85,documentation/protocol,Markdown,vendor/FSP/RTOS,tracked-clean,1055,19
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/list.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,10295,246
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/portable/MemMang/heap_4.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,24078,626
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/queue.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,131529,3364
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/stream_buffer.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,77000,1718
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/tasks.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,361048,8696
+Multicore_top_CPU0/ra/aws/FreeRTOS/FreeRTOS/Source/timers.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,57896,1340
+Multicore_top_CPU0/ra/aws/FreeRTOS/LICENSE.md,RA8 CPU0/M85,documentation/protocol,Markdown,vendor/FSP/RTOS,tracked-clean,1055,19
+Multicore_top_CPU0/ra/fsp/inc/api/bsp_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4108,101
+Multicore_top_CPU0/ra/fsp/inc/api/fsp_common_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,27325,384
+Multicore_top_CPU0/ra/fsp/inc/api/r_elc_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6187,160
+Multicore_top_CPU0/ra/fsp/inc/api/r_i2s_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12413,259
+Multicore_top_CPU0/ra/fsp/inc/api/r_ioport_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,9138,192
+Multicore_top_CPU0/ra/fsp/inc/api/r_spi_flash_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,16726,342
+Multicore_top_CPU0/ra/fsp/inc/api/r_timer_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,15318,329
+Multicore_top_CPU0/ra/fsp/inc/api/r_transfer_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18544,389
+Multicore_top_CPU0/ra/fsp/inc/api/r_uart_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12201,266
+Multicore_top_CPU0/ra/fsp/inc/api/r_usb_basic_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,30716,666
+Multicore_top_CPU0/ra/fsp/inc/api/rm_ethosu_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,5336,103
+Multicore_top_CPU0/ra/fsp/inc/fsp_features.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18450,297
+Multicore_top_CPU0/ra/fsp/inc/fsp_version.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2534,76
+Multicore_top_CPU0/ra/fsp/inc/instances/r_dmac.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,6787,135
+Multicore_top_CPU0/ra/fsp/inc/instances/r_dtc.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5174,103
+Multicore_top_CPU0/ra/fsp/inc/instances/r_gpt.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25870,457
+Multicore_top_CPU0/ra/fsp/inc/instances/r_ioport.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,28702,543
+Multicore_top_CPU0/ra/fsp/inc/instances/r_ospi_b.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,21602,375
+Multicore_top_CPU0/ra/fsp/inc/instances/r_sci_b_uart.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11771,221
+Multicore_top_CPU0/ra/fsp/inc/instances/r_ssi.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6279,123
+Multicore_top_CPU0/ra/fsp/inc/instances/r_usb_basic.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5532,123
+Multicore_top_CPU0/ra/fsp/inc/instances/rm_ethosu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,4108,78
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core0.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6961165,94177
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core1.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6982405,94482
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/renesas.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6241,200
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/system.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,869,44
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6980,132
+Multicore_top_CPU0/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/system.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,27743,718
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_clocks.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,157249,3532
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_clocks.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,135724,1794
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_common.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,13056,311
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_common.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,30782,767
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4068,90
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_delay.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,11274,207
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_delay.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3850,77
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_exceptions.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2001,44
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_group_irq.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,5645,122
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_group_irq.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3203,69
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_guard.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,1880,41
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_guard.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1085,32
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_io.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,1659,27
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_io.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24206,465
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_ipc.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6247,148
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_ipc.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2547,60
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_irq.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,14801,310
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_irq.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12260,238
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_macl.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,84306,2050
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_macl.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7947,164
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4167,87
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_mmf.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6122,141
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_module_stop.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25224,389
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_ospi_b.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,3817,77
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_ospi_b.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1789,39
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_register_protection.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,5721,120
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_register_protection.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2808,63
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_sbrk.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,4602,99
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_sdram.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,9056,199
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_sdram.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1745,37
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_security.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,26316,563
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_security.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1609,33
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/all/bsp_tfu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8658,218
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_elc.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43526,583
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_feature.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,72101,629
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_linker.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,7457,99
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_mcu_info.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2201,46
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_override.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13532,298
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/bsp_peripheral.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11411,218
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/r_adc_device_types.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12927,182
+Multicore_top_CPU0/ra/fsp/src/bsp/mcu/ra8p1/r_lpm_device_types.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6452,104
+Multicore_top_CPU0/ra/fsp/src/r_dmac/r_dmac.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,35712,808
+Multicore_top_CPU0/ra/fsp/src/r_dtc/r_dtc.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,31629,699
+Multicore_top_CPU0/ra/fsp/src/r_gpt/r_gpt.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,92733,2078
+Multicore_top_CPU0/ra/fsp/src/r_ioport/r_ioport.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,44603,1034
+Multicore_top_CPU0/ra/fsp/src/r_ospi_b/r_ospi_b.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,79172,1788
+Multicore_top_CPU0/ra/fsp/src/r_sci_b_uart/r_sci_b_uart.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,81080,1860
+Multicore_top_CPU0/ra/fsp/src/r_ssi/r_ssi.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,58768,1282
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/r_usb_basic.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,170648,4287
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_basic_define.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,65347,1184
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_cstd_rtos.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5243,131
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_extern.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,44535,902
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/inc/r_usb_typedef.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,10461,257
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_cdataio.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,32057,788
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_clibusbip.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,29444,777
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_cstd_rtos.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,80291,2260
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hbc.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,11437,268
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hcontrolrw.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,18792,520
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hdriver.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,129294,3511
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hhubsys.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,146517,3700
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hintfifo.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,14412,365
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hinthandler_usbip0.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,4694,123
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hinthandler_usbip1.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,2788,76
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hlibusbip.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,99070,2531
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hmanager.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,139437,3387
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hscheduler.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,18315,504
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hsignal.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6445,167
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_hstdfunction.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,11949,314
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pbc.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,8441,218
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pcontrolrw.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6524,192
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pdriver.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,94642,2604
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pintfifo.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6726,188
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pinthandler_usbip0.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,4459,114
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_plibusbip.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,68846,1916
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_psignal.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,8416,231
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pstdfunction.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,13121,380
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/driver/r_usb_pstdrequest.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,82932,2167
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_bitdefine.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,28176,485
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_dmac.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4521,84
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/inc/r_usb_reg_access.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,15409,449
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_creg_abs.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,18411,506
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_creg_access.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,146661,3932
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_dma.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,51185,1311
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_hostelectrical.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,7981,231
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_hreg_abs.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,39807,1128
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_hreg_access.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,42524,1003
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_mcu.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,41629,1140
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_preg_abs.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,29565,885
+Multicore_top_CPU0/ra/fsp/src/r_usb_basic/src/hw/r_usb_preg_access.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,14529,408
+Multicore_top_CPU0/ra/fsp/src/rm_ethosu/ethosu_log.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,1833,61
+Multicore_top_CPU0/ra/fsp/src/rm_ethosu/rm_ethosu.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,12502,309
+Multicore_top_CPU0/ra/fsp/src/rm_freertos_port/port.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,68775,1625
+Multicore_top_CPU0/ra/fsp/src/rm_freertos_port/portmacro.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12926,347
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/include/ethosu_driver.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,11907,399
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/include/ethosu_types.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,2820,85
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/include/pmu_ethosu.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,17952,515
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu55_interface.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,832431,26197
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu65_interface.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,829419,26060
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_config_u55.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,2642,124
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_config_u65.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,2642,124
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_device.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,4180,115
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_device_u55_u65.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,12442,373
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_driver.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,24511,808
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_interface.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,untracked,1013,34
+Multicore_top_CPU0/ra/npu/ethos-u-core-driver/src/ethosu_pmu.c,RA8 CPU0/M85,generated/vendor-source,C,vendor/FSP/RTOS,untracked,9223,316
+Multicore_top_CPU0/ra_cfg.txt,RA8 CPU0/M85,configuration/build,Text configuration,project-authored,tracked-clean,80868,1033
+Multicore_top_CPU0/ra_cfg/aws/FreeRTOSConfig.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,10292,244
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/board_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,284,13
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,2205,63
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_mcu_device_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,tracked-clean,192,5
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_mcu_device_pn_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,911,20
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,21434,504
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_mcu_ofs_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,1816,35
+Multicore_top_CPU0/ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,523,16
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_dmac_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,untracked,280,13
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_dtc_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,tracked-clean,371,14
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_gpt_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,tracked-clean,528,21
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_ioport_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,tracked-clean,334,14
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_ospi_b_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,untracked,804,24
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_sci_b_uart_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,544,16
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_ssi_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,392,14
+Multicore_top_CPU0/ra_cfg/fsp_cfg/r_usb_basic_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,modified,5462,134
+Multicore_top_CPU0/ra_cfg/fsp_cfg/rm_ethosu_cfg.h,RA8 CPU0/M85,application-source,C/C++ header,FSP-generated-config,untracked,594,18
+Multicore_top_CPU0/ra_gen/audio_infer_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,8401,192
+Multicore_top_CPU0/ra_gen/audio_infer_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,1446,36
+Multicore_top_CPU0/ra_gen/bsp_clock_cfg.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,5490,75
+Multicore_top_CPU0/ra_gen/camera_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,10501,257
+Multicore_top_CPU0/ra_gen/camera_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,1806,53
+Multicore_top_CPU0/ra_gen/cloud_protocol_thread.c,RA8 CPU0/M85,protocol/IPC,C,FSP-generated,modified,4454,84
+Multicore_top_CPU0/ra_gen/cloud_protocol_thread.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,FSP-generated,modified,598,16
+Multicore_top_CPU0/ra_gen/command_dispatch_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4498,84
+Multicore_top_CPU0/ra_gen/command_dispatch_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,608,16
+Multicore_top_CPU0/ra_gen/common_data.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,1247,43
+Multicore_top_CPU0/ra_gen/common_data.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,952,30
+Multicore_top_CPU0/ra_gen/cpu1_start.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4206,84
+Multicore_top_CPU0/ra_gen/cpu1_start.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,543,16
+Multicore_top_CPU0/ra_gen/esp32_uart_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,13642,303
+Multicore_top_CPU0/ra_gen/esp32_uart_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,1621,41
+Multicore_top_CPU0/ra_gen/file_request_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4411,84
+Multicore_top_CPU0/ra_gen/file_request_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,588,16
+Multicore_top_CPU0/ra_gen/fusion_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4271,84
+Multicore_top_CPU0/ra_gen/fusion_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,558,16
+Multicore_top_CPU0/ra_gen/hal_data.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,9017,213
+Multicore_top_CPU0/ra_gen/hal_data.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,1043,35
+Multicore_top_CPU0/ra_gen/m85_watchdog_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4409,84
+Multicore_top_CPU0/ra_gen/m85_watchdog_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,588,16
+Multicore_top_CPU0/ra_gen/main.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,11183,203
+Multicore_top_CPU0/ra_gen/pin_data.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,13335,436
+Multicore_top_CPU0/ra_gen/playback_control_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4504,84
+Multicore_top_CPU0/ra_gen/playback_control_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,608,16
+Multicore_top_CPU0/ra_gen/telemetry_upload_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4504,84
+Multicore_top_CPU0/ra_gen/telemetry_upload_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,608,16
+Multicore_top_CPU0/ra_gen/vector_data.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,3832,49
+Multicore_top_CPU0/ra_gen/vector_data.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,4645,70
+Multicore_top_CPU0/ra_gen/vision_infer_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4413,84
+Multicore_top_CPU0/ra_gen/vision_infer_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,588,16
+Multicore_top_CPU0/ra_gen/vision_preprocess_thread.c,RA8 CPU0/M85,generated/vendor-source,C,FSP-generated,modified,4528,84
+Multicore_top_CPU0/ra_gen/vision_preprocess_thread.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,FSP-generated,modified,613,16
+Multicore_top_CPU0/script/fsp.lld,RA8 CPU0/M85,configuration/build,Linker script,project-authored,modified,333,17
+Multicore_top_CPU0/src/audio_infer_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,5589,206
+Multicore_top_CPU0/src/camera_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,26179,805
+Multicore_top_CPU0/src/cloud_protocol_thread_entry.c,RA8 CPU0/M85,protocol/IPC,C,project-authored,tracked-clean,265,12
+Multicore_top_CPU0/src/command_dispatch_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,267,12
+Multicore_top_CPU0/src/cpu1_start_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,241,9
+Multicore_top_CPU0/src/esp32_uart_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,modified,2216,68
+Multicore_top_CPU0/src/file_request_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,264,12
+Multicore_top_CPU0/src/fusion_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,modified,56553,1350
+Multicore_top_CPU0/src/hal_warmstart.c,RA8 CPU0/M85,application-source,C,project-authored,modified,2167,63
+Multicore_top_CPU0/src/m85_watchdog_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,262,12
+Multicore_top_CPU0/src/playback_control_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,273,12
+Multicore_top_CPU0/src/telemetry_upload_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,273,12
+Multicore_top_CPU0/src/third_party/tjpgd/tjpgd.c,RA8 CPU0/M85,generated/vendor-source,C,third-party,untracked,44201,1153
+Multicore_top_CPU0/src/third_party/tjpgd/tjpgd.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,third-party,untracked,3623,102
+Multicore_top_CPU0/src/third_party/tjpgd/tjpgdcnf.h,RA8 CPU0/M85,generated/vendor-source,C/C++ header,third-party,untracked,877,33
+Multicore_top_CPU0/src/thread_code/audio_cry_inference.c,RA8 CPU0/M85,application-source,C,project-authored,modified,28971,923
+Multicore_top_CPU0/src/thread_code/audio_cry_inference.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,modified,1262,30
+Multicore_top_CPU0/src/thread_code/audio_cry_model_data.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,modified,179068,1872
+Multicore_top_CPU0/src/thread_code/audio_cry_type_model_data.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,modified,151493,1693
+Multicore_top_CPU0/src/thread_code/audio_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,1952,69
+Multicore_top_CPU0/src/thread_code/camera_usb_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,3804,112
+Multicore_top_CPU0/src/thread_code/esp32_uart_driver.c,RA8 CPU0/M85,application-source,C,project-authored,modified,5966,219
+Multicore_top_CPU0/src/thread_code/esp32_uart_driver.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,modified,1492,53
+Multicore_top_CPU0/src/thread_code/mic_capture_driver.c,RA8 CPU0/M85,application-source,C,project-authored,modified,15644,572
+Multicore_top_CPU0/src/thread_code/mic_capture_driver.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,tracked-clean,442,15
+Multicore_top_CPU0/src/thread_code/mic_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,3201,105
+Multicore_top_CPU0/src/thread_code/multimodal_fusion.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,tracked-clean,7458,256
+Multicore_top_CPU0/src/thread_code/pressure_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,1477,44
+Multicore_top_CPU0/src/thread_code/ra8_esp32_protocol.c,RA8 CPU0/M85,protocol/IPC,C,project-authored,tracked-clean,124050,2401
+Multicore_top_CPU0/src/thread_code/ra8_esp32_protocol.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,modified,2039,61
+Multicore_top_CPU0/src/thread_code/README.md,RA8 CPU0/M85,documentation/protocol,Markdown,project-authored,tracked-clean,343,10
+Multicore_top_CPU0/src/thread_code/sd_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,1274,41
+Multicore_top_CPU0/src/thread_code/serial_camera_driver.c,RA8 CPU0/M85,application-source,C,project-authored,modified,23680,693
+Multicore_top_CPU0/src/thread_code/serial_camera_driver.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,modified,389,14
+Multicore_top_CPU0/src/thread_code/serial_camera_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,modified,4247,123
+Multicore_top_CPU0/src/thread_code/thermal_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,1983,60
+Multicore_top_CPU0/src/thread_code/tmp117_ipc_shared.h,RA8 CPU0/M85,protocol/IPC,C/C++ header,project-authored,tracked-clean,1119,37
+Multicore_top_CPU0/src/thread_code/vision_external_memory.c,RA8 CPU0/M85,application-source,C,project-authored,untracked,5151,188
+Multicore_top_CPU0/src/thread_code/vision_external_memory.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,untracked,718,23
+Multicore_top_CPU0/src/thread_code/vision_jpeg_decoder.c,RA8 CPU0/M85,application-source,C,project-authored,untracked,5593,179
+Multicore_top_CPU0/src/thread_code/vision_jpeg_decoder.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,untracked,1324,39
+Multicore_top_CPU0/src/thread_code/vision_model_storage.c,RA8 CPU0/M85,application-source,C,project-authored,untracked,4453,141
+Multicore_top_CPU0/src/thread_code/vision_model_storage.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,untracked,848,26
+Multicore_top_CPU0/src/thread_code/vision_runtime.c,RA8 CPU0/M85,application-source,C,project-authored,untracked,8153,308
+Multicore_top_CPU0/src/thread_code/vision_runtime.h,RA8 CPU0/M85,application-source,C/C++ header,project-authored,untracked,4643,156
+Multicore_top_CPU0/src/vision_infer_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,tracked-clean,19396,553
+Multicore_top_CPU0/src/vision_models/baby_scene_labels.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,381,18
+Multicore_top_CPU0/src/vision_models/ethosu_common.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,261,15
+Multicore_top_CPU0/src/vision_models/model_metadata.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,1539,44
+Multicore_top_CPU0/src/vision_models/modelbehavior.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,3469,79
+Multicore_top_CPU0/src/vision_models/modelbehavior.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,3284,71
+Multicore_top_CPU0/src/vision_models/modelocclusion.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,3479,79
+Multicore_top_CPU0/src/vision_models/modelocclusion.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,3291,71
+Multicore_top_CPU0/src/vision_models/modelscene.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,3421,79
+Multicore_top_CPU0/src/vision_models/modelscene.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,3248,71
+Multicore_top_CPU0/src/vision_models/postprocessing.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,20039,459
+Multicore_top_CPU0/src/vision_models/postprocessing.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,4114,87
+Multicore_top_CPU0/src/vision_models/preprocessing.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,9949,200
+Multicore_top_CPU0/src/vision_models/preprocessing.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,2568,60
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_command_stream.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,40879,428
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_command_stream.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,348,10
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_invoke.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,2519,74
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_invoke.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,479,18
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_model_data.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,3323624,34270
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_model_data.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,328,10
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_tensors.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,809,17
+Multicore_top_CPU0/src/vision_models/sub_0000behavior_tensors.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,559,18
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_command_stream.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,40760,427
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_command_stream.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,356,10
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_invoke.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,2540,74
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_invoke.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,485,18
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_model_data.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,3319843,34231
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_model_data.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,336,10
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_tensors.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,816,17
+Multicore_top_CPU0/src/vision_models/sub_0000occlusion_tensors.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,567,18
+Multicore_top_CPU0/src/vision_models/sub_0000scene_command_stream.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,158269,1638
+Multicore_top_CPU0/src/vision_models/sub_0000scene_command_stream.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,324,10
+Multicore_top_CPU0/src/vision_models/sub_0000scene_invoke.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,2491,74
+Multicore_top_CPU0/src/vision_models/sub_0000scene_invoke.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,461,18
+Multicore_top_CPU0/src/vision_models/sub_0000scene_model_data.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,28185399,290577
+Multicore_top_CPU0/src/vision_models/sub_0000scene_model_data.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,304,10
+Multicore_top_CPU0/src/vision_models/sub_0000scene_tensors.c,RA8 CPU0/M85,embedded-model,C,embedded-model-generated,untracked,790,17
+Multicore_top_CPU0/src/vision_models/sub_0000scene_tensors.h,RA8 CPU0/M85,embedded-model,C/C++ header,embedded-model-generated,untracked,526,18
+Multicore_top_CPU0/src/vision_preprocess_thread_entry.c,RA8 CPU0/M85,application-source,C,project-authored,modified,6454,157
+Multicore_top_CPU1 Debug_Multicore.launch,RA8-S3 root,configuration/build,XML/e2 studio launch,project-authored,tracked-clean,22518,226
+Multicore_top_CPU1/configuration.xml,RA8 CPU1/M33,configuration/build,XML,project-authored,modified,84285,965
+Multicore_top_CPU1/Multicore_top_CPU1 Debug_Multicore.jlink,RA8 CPU1/M33,tool/script,J-Link command,project-authored,tracked-clean,868,46
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_armclang_a.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13876,392
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_clang_a.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13485,386
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_cp15.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13760,564
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_gcc_a.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6679,223
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/cmsis_iccarm_a.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,16500,558
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/a-profile/irq_ctrl.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8681,190
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_armclang.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21413,707
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_clang.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21408,708
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_compiler.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,9818,292
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_gcc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,31177,1006
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/cmsis_version.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1980,44
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_ca.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,141649,3000
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,42753,967
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm0plus.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,51169,1103
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm1.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43802,992
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm23.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,116817,2253
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm3.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,115664,2045
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm33.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,184231,3245
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm35p.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,184243,3245
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm4.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,127521,2237
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm52.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,318645,4783
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm55.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,323871,4895
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm7.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,145208,2468
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_cm85.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,327332,4936
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc000.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,48087,1055
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_sc300.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,114700,2028
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/core_starmc1.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,197279,3614
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_cachel1.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13471,439
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv7m_mpu.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11731,273
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv81m_pac.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6035,203
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_mpu.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,14399,421
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/armv8m_pmu.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,22872,335
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_armclang_m.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24434,818
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_clang_m.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24456,824
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_gcc_m.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,21431,717
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_iccarm_m.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,31709,1043
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/m-profile/cmsis_tiarmclang_m.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43266,1451
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_armclang_r.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4887,161
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_clang_r.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4884,161
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/r-profile/cmsis_gcc_r.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4714,163
+Multicore_top_CPU1/ra/arm/CMSIS_6/CMSIS/Core/Include/tz_context.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2520,68
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/event_groups.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,36811,884
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/atomic.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13751,427
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/CMakeLists.txt,RA8 CPU1/M33,generated/vendor-source,CMake,vendor/FSP/RTOS,tracked-clean,505,15
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/croutine.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,29306,762
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/deprecated_definitions.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7799,281
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/event_groups.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,37117,857
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/FreeRTOS.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,108855,3334
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/list.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25313,511
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/message_buffer.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,45829,967
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_prototypes.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,26541,389
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_syscall_numbers.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5965,105
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/mpu_wrappers.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18190,276
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/newlib-freertos.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2528,62
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/picolibc-freertos.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4533,91
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/portable.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11873,281
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/projdefs.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7489,138
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/queue.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,70783,1810
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/semphr.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,51456,1215
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/stack_macros.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8988,141
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/StackMacros.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1607,34
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/stream_buffer.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,59792,1280
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/task.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,167820,3774
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/include/timers.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,67133,1431
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/LICENSE.md,RA8 CPU1/M33,documentation/protocol,Markdown,vendor/FSP/RTOS,tracked-clean,1055,19
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/list.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,10295,246
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/portable/MemMang/heap_4.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,24704,626
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/queue.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,131529,3364
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/stream_buffer.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,77000,1718
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/tasks.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,361048,8696
+Multicore_top_CPU1/ra/aws/FreeRTOS/FreeRTOS/Source/timers.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,57896,1340
+Multicore_top_CPU1/ra/aws/FreeRTOS/LICENSE.md,RA8 CPU1/M33,documentation/protocol,Markdown,vendor/FSP/RTOS,tracked-clean,1055,19
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_crc.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,12060,258
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_dir.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,138808,3725
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_error.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,17005,318
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_fat.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,58160,1687
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_file.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,116565,3346
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_format.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,50211,1078
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_ioman.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,73031,2006
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_memory.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,3606,117
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_stdio.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,modified,74450,2214
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_string.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,24699,784
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_sys.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,9349,288
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/ff_time.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,9682,301
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_crc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1702,45
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_devices.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2541,74
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_dir.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11104,286
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_error.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,17046,266
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_fat.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6807,168
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_fatdef.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4324,108
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_file.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8326,205
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_format.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3491,87
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_headers.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2096,62
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_ioman.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18322,417
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_locking.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3272,94
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_memory.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5799,187
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_old_config_defines.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7633,256
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_stdio.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,17070,408
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_string.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5681,139
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_sys.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4111,133
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/ff_time.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3077,86
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/FreeRTOS_errno_FAT.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5088,87
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/include/FreeRTOSFATConfigDefaults.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18041,524
+Multicore_top_CPU1/ra/freertos/Lab-Project-FreeRTOS-FAT/LICENSE.md,RA8 CPU1/M33,documentation/protocol,Markdown,vendor/FSP/RTOS,tracked-clean,1055,19
+Multicore_top_CPU1/ra/fsp/inc/api/bsp_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4108,101
+Multicore_top_CPU1/ra/fsp/inc/api/fsp_common_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,27325,384
+Multicore_top_CPU1/ra/fsp/inc/api/r_elc_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6187,160
+Multicore_top_CPU1/ra/fsp/inc/api/r_i2c_master_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,9780,198
+Multicore_top_CPU1/ra/fsp/inc/api/r_i2s_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12413,259
+Multicore_top_CPU1/ra/fsp/inc/api/r_ioport_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,9138,192
+Multicore_top_CPU1/ra/fsp/inc/api/r_sdmmc_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24173,496
+Multicore_top_CPU1/ra/fsp/inc/api/r_timer_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,15318,329
+Multicore_top_CPU1/ra/fsp/inc/api/r_transfer_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18544,389
+Multicore_top_CPU1/ra/fsp/inc/api/r_uart_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12201,266
+Multicore_top_CPU1/ra/fsp/inc/api/rm_block_media_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,10356,188
+Multicore_top_CPU1/ra/fsp/inc/api/rm_freertos_plus_fat_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8955,185
+Multicore_top_CPU1/ra/fsp/inc/fsp_features.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,18450,297
+Multicore_top_CPU1/ra/fsp/inc/fsp_version.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2534,76
+Multicore_top_CPU1/ra/fsp/inc/instances/r_dtc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5174,103
+Multicore_top_CPU1/ra/fsp/inc/instances/r_gpt.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25870,457
+Multicore_top_CPU1/ra/fsp/inc/instances/r_iic_master.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7920,142
+Multicore_top_CPU1/ra/fsp/inc/instances/r_ioport.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,28702,543
+Multicore_top_CPU1/ra/fsp/inc/instances/r_sci_b_uart.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11771,221
+Multicore_top_CPU1/ra/fsp/inc/instances/r_sdhi.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8211,159
+Multicore_top_CPU1/ra/fsp/inc/instances/r_ssi.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6279,123
+Multicore_top_CPU1/ra/fsp/inc/instances/rm_block_media_sdmmc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,5569,100
+Multicore_top_CPU1/ra/fsp/inc/instances/rm_freertos_plus_fat.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4265,91
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core0.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6961165,94177
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/R7KA8P1KF_core1.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6982405,94482
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/renesas.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6241,200
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Include/system.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,869,44
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/startup.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6980,132
+Multicore_top_CPU1/ra/fsp/src/bsp/cmsis/Device/RENESAS/Source/system.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,27743,718
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_clocks.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,157249,3532
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_clocks.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,135724,1794
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_common.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,13056,311
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_common.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,30782,767
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_compiler_support.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4068,90
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_delay.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,11274,207
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_delay.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3850,77
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_exceptions.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2001,44
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_group_irq.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,5645,122
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_group_irq.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,3203,69
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_guard.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,1880,41
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_guard.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1085,32
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_io.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,1659,27
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_io.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,24206,465
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_ipc.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,6247,148
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_ipc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2547,60
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_irq.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,14801,310
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_irq.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12260,238
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_macl.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,84306,2050
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_macl.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,7947,164
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_mcu_api.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,4167,87
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_mmf.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6122,141
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_module_stop.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,25224,389
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_ospi_b.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,3817,77
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_ospi_b.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1789,39
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_register_protection.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,5721,120
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_register_protection.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2808,63
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_sbrk.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,4602,99
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_sdram.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,9056,199
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_sdram.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1745,37
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_security.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,26316,563
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_security.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,1609,33
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/all/bsp_tfu.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,8658,218
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_elc.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,43526,583
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_feature.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,72101,629
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_linker.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,7457,99
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_mcu_info.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,2201,46
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_override.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,13532,298
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/bsp_peripheral.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,11411,218
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/r_adc_device_types.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12927,182
+Multicore_top_CPU1/ra/fsp/src/bsp/mcu/ra8p1/r_lpm_device_types.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,6452,104
+Multicore_top_CPU1/ra/fsp/src/r_dtc/r_dtc.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,31629,699
+Multicore_top_CPU1/ra/fsp/src/r_gpt/r_gpt.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,92733,2078
+Multicore_top_CPU1/ra/fsp/src/r_iic_master/r_iic_master.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,75588,1618
+Multicore_top_CPU1/ra/fsp/src/r_ioport/r_ioport.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,44603,1034
+Multicore_top_CPU1/ra/fsp/src/r_sci_b_uart/r_sci_b_uart.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,81080,1860
+Multicore_top_CPU1/ra/fsp/src/r_sdhi/r_sdhi.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,modified,108426,2357
+Multicore_top_CPU1/ra/fsp/src/r_sdhi/r_sdhi_private.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,14118,260
+Multicore_top_CPU1/ra/fsp/src/r_ssi/r_ssi.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,58768,1282
+Multicore_top_CPU1/ra/fsp/src/rm_block_media_sdmmc/rm_block_media_sdmmc.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,25827,517
+Multicore_top_CPU1/ra/fsp/src/rm_freertos_plus_fat/ff_locking.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,12369,398
+Multicore_top_CPU1/ra/fsp/src/rm_freertos_plus_fat/FreeRTOSConfigMinimal.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,650,18
+Multicore_top_CPU1/ra/fsp/src/rm_freertos_plus_fat/rm_freertos_plus_fat.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,24812,557
+Multicore_top_CPU1/ra/fsp/src/rm_freertos_port/port.c,RA8 CPU1/M33,generated/vendor-source,C,vendor/FSP/RTOS,tracked-clean,68775,1625
+Multicore_top_CPU1/ra/fsp/src/rm_freertos_port/portmacro.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,vendor/FSP/RTOS,tracked-clean,12926,347
+Multicore_top_CPU1/ra_cfg.txt,RA8 CPU1/M33,configuration/build,Text configuration,project-authored,modified,83730,1101
+Multicore_top_CPU1/ra_cfg/aws/FreeRTOSConfig.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,10313,246
+Multicore_top_CPU1/ra_cfg/driver/rm_block_media_sdmmc_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,338,13
+Multicore_top_CPU1/ra_cfg/freertos/FreeRTOSFATConfig.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,6035,172
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/board_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,284,13
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,2202,63
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_mcu_device_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,192,5
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_mcu_device_pn_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,911,20
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_mcu_family_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,21476,504
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_mcu_ofs_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,1816,35
+Multicore_top_CPU1/ra_cfg/fsp_cfg/bsp/bsp_pin_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,523,16
+Multicore_top_CPU1/ra_cfg/fsp_cfg/middleware/rm_freertos_plus_fat_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,338,13
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_dtc_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,375,14
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_gpt_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,528,21
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_iic_master_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,395,15
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_ioport_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,tracked-clean,334,14
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_sci_b_uart_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,544,16
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_sdhi_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,607,20
+Multicore_top_CPU1/ra_cfg/fsp_cfg/r_ssi_cfg.h,RA8 CPU1/M33,application-source,C/C++ header,FSP-generated-config,modified,392,14
+Multicore_top_CPU1/ra_gen/audio_capture_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4433,84
+Multicore_top_CPU1/ra_gen/audio_capture_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,593,16
+Multicore_top_CPU1/ra_gen/audio_feature_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4437,84
+Multicore_top_CPU1/ra_gen/audio_feature_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,593,16
+Multicore_top_CPU1/ra_gen/bsp_clock_cfg.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,tracked-clean,5484,75
+Multicore_top_CPU1/ra_gen/common_data.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,5300,161
+Multicore_top_CPU1/ra_gen/common_data.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,2349,66
+Multicore_top_CPU1/ra_gen/file_system_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4382,84
+Multicore_top_CPU1/ra_gen/file_system_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,583,16
+Multicore_top_CPU1/ra_gen/file_update_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4386,84
+Multicore_top_CPU1/ra_gen/file_update_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,583,16
+Multicore_top_CPU1/ra_gen/hal_data.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,116,5
+Multicore_top_CPU1/ra_gen/hal_data.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,tracked-clean,255,11
+Multicore_top_CPU1/ra_gen/m33_ipc_rx_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4363,84
+Multicore_top_CPU1/ra_gen/m33_ipc_rx_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,578,16
+Multicore_top_CPU1/ra_gen/m33_ipc_tx_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4363,84
+Multicore_top_CPU1/ra_gen/m33_ipc_tx_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,578,16
+Multicore_top_CPU1/ra_gen/m33_watchdog_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4409,84
+Multicore_top_CPU1/ra_gen/m33_watchdog_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,588,16
+Multicore_top_CPU1/ra_gen/main.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,11135,203
+Multicore_top_CPU1/ra_gen/pin_data.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4638,151
+Multicore_top_CPU1/ra_gen/pressure_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,7884,169
+Multicore_top_CPU1/ra_gen/pressure_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,1187,29
+Multicore_top_CPU1/ra_gen/sd_audio_player_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,12354,277
+Multicore_top_CPU1/ra_gen/sd_audio_player_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,1521,40
+Multicore_top_CPU1/ra_gen/sd_card_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4290,84
+Multicore_top_CPU1/ra_gen/sd_card_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,563,16
+Multicore_top_CPU1/ra_gen/speaker_output_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,4452,84
+Multicore_top_CPU1/ra_gen/speaker_output_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,598,16
+Multicore_top_CPU1/ra_gen/temp_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,6312,142
+Multicore_top_CPU1/ra_gen/temp_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,1010,28
+Multicore_top_CPU1/ra_gen/thermal_thread.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,9586,218
+Multicore_top_CPU1/ra_gen/thermal_thread.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,1531,37
+Multicore_top_CPU1/ra_gen/vector_data.c,RA8 CPU1/M33,generated/vendor-source,C,FSP-generated,modified,3323,45
+Multicore_top_CPU1/ra_gen/vector_data.h,RA8 CPU1/M33,generated/vendor-source,C/C++ header,FSP-generated,modified,4013,64
+Multicore_top_CPU1/script/fsp.lld,RA8 CPU1/M33,configuration/build,Linker script,project-authored,tracked-clean,106,6
+Multicore_top_CPU1/src/audio_capture_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,352,14
+Multicore_top_CPU1/src/audio_feature_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,266,12
+Multicore_top_CPU1/src/file_system_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,modified,815,33
+Multicore_top_CPU1/src/file_update_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,260,12
+Multicore_top_CPU1/src/hal_warmstart.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,1869,55
+Multicore_top_CPU1/src/m33_ipc_rx_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,258,12
+Multicore_top_CPU1/src/m33_ipc_tx_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,258,12
+Multicore_top_CPU1/src/m33_watchdog_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,262,12
+Multicore_top_CPU1/src/pressure_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,585,27
+Multicore_top_CPU1/src/sd_audio_player_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,281,11
+Multicore_top_CPU1/src/sd_card_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,modified,1880,64
+Multicore_top_CPU1/src/speaker_output_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,263,12
+Multicore_top_CPU1/src/temp_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,385,17
+Multicore_top_CPU1/src/thermal_thread_entry.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,507,17
+Multicore_top_CPU1/src/thread_code/audio_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,1952,69
+Multicore_top_CPU1/src/thread_code/audio_wav_player.c,RA8 CPU1/M33,application-source,C,project-authored,modified,43708,1383
+Multicore_top_CPU1/src/thread_code/audio_wav_player.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,tracked-clean,1608,62
+Multicore_top_CPU1/src/thread_code/camera_usb_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,3804,112
+Multicore_top_CPU1/src/thread_code/mic_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,3201,105
+Multicore_top_CPU1/src/thread_code/mic_record_writer.c,RA8 CPU1/M33,application-source,C,project-authored,modified,23040,744
+Multicore_top_CPU1/src/thread_code/mic_record_writer.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,tracked-clean,193,9
+Multicore_top_CPU1/src/thread_code/pressure_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,1477,44
+Multicore_top_CPU1/src/thread_code/pressure_matrix_driver.c,RA8 CPU1/M33,application-source,C,project-authored,tracked-clean,38016,1290
+Multicore_top_CPU1/src/thread_code/pressure_matrix_driver.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,tracked-clean,1848,55
+Multicore_top_CPU1/src/thread_code/README.md,RA8 CPU1/M33,documentation/protocol,Markdown,project-authored,tracked-clean,322,10
+Multicore_top_CPU1/src/thread_code/sd_card_driver.c,RA8 CPU1/M33,application-source,C,project-authored,modified,22011,587
+Multicore_top_CPU1/src/thread_code/sd_card_driver.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,modified,2612,102
+Multicore_top_CPU1/src/thread_code/sd_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,1274,41
+Multicore_top_CPU1/src/thread_code/serial_camera_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,modified,4247,123
+Multicore_top_CPU1/src/thread_code/serial_camera_writer.c,RA8 CPU1/M33,application-source,C,project-authored,modified,14840,421
+Multicore_top_CPU1/src/thread_code/serial_camera_writer.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,tracked-clean,169,8
+Multicore_top_CPU1/src/thread_code/system_logger.c,RA8 CPU1/M33,application-source,C,project-authored,modified,37405,677
+Multicore_top_CPU1/src/thread_code/system_logger.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,modified,1438,55
+Multicore_top_CPU1/src/thread_code/thermal_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,1983,60
+Multicore_top_CPU1/src/thread_code/thermal_uart_driver.c,RA8 CPU1/M33,application-source,C,project-authored,modified,27285,874
+Multicore_top_CPU1/src/thread_code/thermal_uart_driver.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,tracked-clean,1076,44
+Multicore_top_CPU1/src/thread_code/tmp117_ipc_shared.h,RA8 CPU1/M33,protocol/IPC,C/C++ header,project-authored,tracked-clean,1119,37
+Multicore_top_CPU1/src/thread_code/tmp117_matrix_driver.c,RA8 CPU1/M33,application-source,C,project-authored,modified,16075,534
+Multicore_top_CPU1/src/thread_code/tmp117_matrix_driver.h,RA8 CPU1/M33,application-source,C/C++ header,project-authored,modified,1661,49
+tools/build_vision_flash_images.ps1,RA8 build/test tools,tool/script,PowerShell,project-authored,untracked,1671,49
+tools/collect_audio_hardware_evidence.py,RA8 build/test tools,tool/script,Python,project-authored,untracked,5025,121
+tools/collect_ra8_hardware_evidence.ps1,RA8 build/test tools,tool/script,PowerShell,project-authored,untracked,8951,193
+tools/generate_ra8_s3_inventory.py,RA8 build/test tools,tool/script,Python,project-authored,untracked,23097,606
+tools/program_ra8_internal.jlink,RA8 build/test tools,tool/script,J-Link command,project-authored,untracked,187,12
+tools/program_ra8_internal.ps1,RA8 build/test tools,tool/script,PowerShell,project-authored,untracked,1799,50
+tools/program_vision_models.jlink,RA8 build/test tools,tool/script,J-Link command,project-authored,untracked,210,12
+tools/program_vision_models.ps1,RA8 build/test tools,tool/script,PowerShell,project-authored,untracked,1160,38
+tools/ra8_esp32_protocol/ESP32_ADAPTER_PROTOCOL.md,RA8-S3 protocol tools,documentation/protocol,Markdown,project-authored,tracked-clean,22893,632
+tools/ra8_esp32_protocol/esp32_simulator.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,4604,128
+tools/ra8_esp32_protocol/m1616_matrix_probe.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,4740,158
+tools/ra8_esp32_protocol/ra8_audio_control.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,11832,286
+tools/ra8_esp32_protocol/ra8_live_monitor.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,20202,457
+tools/ra8_esp32_protocol/ra8_protocol.py,RA8-S3 protocol tools,protocol/IPC,Python,project-authored,tracked-clean,4383,146
+tools/ra8_esp32_protocol/ra8_serial_bridge.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,15290,379
+tools/ra8_esp32_protocol/ra8_system_audit.py,RA8-S3 protocol tools,tool/script,Python,project-authored,untracked,18659,453
+tools/ra8_esp32_protocol/README.md,RA8-S3 protocol tools,documentation/protocol,Markdown,project-authored,tracked-clean,5099,126
+tools/ra8_esp32_protocol/requirements.txt,RA8-S3 protocol tools,configuration/build,Text configuration,project-authored,tracked-clean,29,3
+tools/ra8_esp32_protocol/test_protocol_contract.py,RA8-S3 protocol tools,test,Python,project-authored,untracked,2803,82
+tools/ra8_esp32_protocol/thermal_raw_probe.py,RA8-S3 protocol tools,tool/script,Python,project-authored,tracked-clean,8049,240
+tools/run_ra8_command_evidence.py,RA8 build/test tools,tool/script,Python,project-authored,untracked,14096,371
+tools/verify_project.ps1,RA8 build/test tools,tool/script,PowerShell,project-authored,tracked-clean,2089,73

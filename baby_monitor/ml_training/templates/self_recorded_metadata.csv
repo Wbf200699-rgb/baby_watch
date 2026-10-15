@@ -1,0 +1,3 @@
+filename,baby_id,session_id,group_id,detection_label,classification_label,label_confidence,device,distance_m,environment,source_partition,license
+negative/quiet_room_001.wav,,room_20260724_01,,non_cry,,verified,EK-RA8P1,1.0,quiet,train,private-with-consent
+cry/baby_001_hungry_001.wav,baby_001,baby_001_session_01,,cry,hungry,high,EK-RA8P1,1.0,quiet,test,private-with-consent

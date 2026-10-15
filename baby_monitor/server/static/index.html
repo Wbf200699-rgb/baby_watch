@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>婴儿监护数据中心</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/static/styles.css?v=20260813-soother-switch-1">
+  <link rel="stylesheet" href="/static/media.css?v=20260728-fusion-overlay-2">
+  <link rel="stylesheet" href="/static/diagnostics.css?v=20260728-fusion-overlay-2">
+</head>
+<body>
+  <header class="app-header">
+    <div><strong>婴儿监护数据中心</strong><span>RA8P1 + ESP32-P4X-EYE</span></div>
+    <div class="header-status"><i id="connection-dot"></i><span id="connection">正在连接</span></div>
+  </header>
+  <nav class="app-nav">
+    <div class="tab-strip">
+      <button class="tab active" data-tab="overview">实时总览</button>
+      <button class="tab" data-tab="media">实时音视频</button>
+      <button class="tab" data-tab="recordings">录制测试</button>
+      <button class="tab" data-tab="ai">AI 助手</button>
+      <button class="tab" data-tab="sensors">传感器参数</button>
+      <button class="tab" data-tab="events">告警事件</button>
+      <button class="tab" data-tab="logs">实时日志</button>
+      <button class="tab" data-tab="datasets">数据集与算法</button>
+      <button class="tab" data-tab="models">模型</button>
+    </div>
+    <select id="device" aria-label="选择设备"></select>
+  </nav>
+
+  <main>
+    <section id="overview" class="view active">
+      <div class="metric-grid">
+        <article><label>设备状态</label><strong id="device-state">未知</strong><small id="last-seen">-</small></article>
+        <article><label>安全状态</label><strong id="safety">等待数据</strong><small id="confidence">-</small></article>
+        <article><label>告警等级</label><strong id="alarm-level">L0</strong><small id="alarm-primary">无活动事件</small></article>
+        <article><label>活动事件</label><strong id="incident-count">0</strong><small id="incident-summary">系统状态稳定</small></article>
+        <article><label>哭声检测</label><strong id="cry-detection">等待模型</strong><small id="cry-detection-detail">等待 RA8 推理数据</small></article>
+        <article><label>哭声类型（实验）</label><strong id="cry-type">未知</strong><small id="cry-type-detail">低置信度时保持未知</small></article>
+        <article><label>环境 CO₂</label><strong id="environment-co2">-</strong><small id="environment-co2-detail">等待 SCD41 遥测</small></article>
+        <article><label>环境温湿度</label><strong id="environment-climate">-</strong><small id="environment-climate-detail">等待 SCD41 遥测</small></article>
+        <article><label>BME688 温湿度</label><strong id="bme688-climate">-</strong><small id="bme688-climate-detail">等待 BME688 遥测</small></article>
+        <article><label>BME688 气压</label><strong id="bme688-pressure">-</strong><small id="bme688-pressure-detail">等待 BME688 遥测</small></article>
+        <article><label>BME688 原始气阻</label><strong id="bme688-gas">-</strong><small id="bme688-gas-detail">原始电阻值，非 VOC/IAQ</small></article>
+        <article><label>ESP32 网络</label><strong id="local-ip">-</strong><small id="network-detail">-</small></article>
+        <article><label>服务器观察地址</label><strong id="observed-ip">-</strong><small id="mac-address">-</small></article>
+        <article><label>RA8 链路</label><strong id="ra8-state">未知</strong><small id="ra8-detail">-</small></article>
+        <article><label>固件</label><strong id="firmware">-</strong><small id="rssi">-</small></article>
+        <article><label>遥测刷新</label><strong id="telemetry-rate">-</strong><small id="telemetry-age">等待数据</small></article>
+        <article><label>网关请求</label><strong id="gateway-http">-</strong><small id="gateway-detail">等待诊断</small></article>
+        <article><label>服务端遥测链路</label><strong id="server-telemetry-state">等待</strong><small id="server-telemetry-detail">ACK 与队列等待数据</small></article>
+        <article><label>服务端矩阵链路</label><strong id="server-matrix-state">等待</strong><small id="server-matrix-detail">压力与热成像等待数据</small></article>
+      </div>
+
+      <div class="device-control-stack" aria-label="设备控制">
+        <div class="device-control-bar">
+          <div class="device-control-heading"><strong>暖光灯</strong><span id="warm-light-state">等待状态</span></div>
+          <label class="switch-control" for="warm-light-toggle">
+            <input id="warm-light-toggle" type="checkbox" role="switch" aria-label="暖光灯开关" disabled>
+            <span class="switch-track" aria-hidden="true"></span>
+          </label>
+          <span id="warm-light-detail">P711 · 等待 RA8 上报</span>
+          <span id="warm-light-result" role="status" aria-live="polite"></span>
+        </div>
+        <div class="device-control-bar">
+          <div class="device-control-heading"><strong>拍一拍电机</strong><span id="soother-pat-state">等待状态</span></div>
+          <label class="switch-control" for="soother-toggle">
+            <input id="soother-toggle" type="checkbox" role="switch" aria-label="拍一拍电机开关" disabled>
+            <span class="switch-track" aria-hidden="true"></span>
+          </label>
+          <span id="soother-pat-detail">P914 · 等待 RA8 上报</span>
+          <span id="soother-pat-result" role="status" aria-live="polite"></span>
+        </div>
+        <div class="comfort-advisory">
+          <strong>融合安抚建议</strong>
+          <span id="comfort-recommendation">等待融合协议 v7</span>
+          <small id="comfort-recommendation-detail">建议仅供用户确认，不会自动驱动继电器</small>
+        </div>
+      </div>
+
+      <form id="environment-threshold-form" class="environment-threshold-panel">
+        <div class="environment-threshold-heading">
+          <div><strong>婴儿在床环境与体表筛查门限</strong><span>仅在多模态确认婴儿在床时触发预警；体表筛查不能替代体温计</span></div>
+          <output id="environment-threshold-state">等待遥测</output>
+        </div>
+        <label><span>CO₂ 上限</span><input id="threshold-co2" type="number" min="400" max="10000" step="50"><em>ppm</em></label>
+        <label><span>环境温度上限</span><input id="threshold-temperature" type="number" min="15" max="50" step="0.5"><em>°C</em></label>
+        <label><span>湿度上限</span><input id="threshold-humidity" type="number" min="20" max="100" step="1"><em>%RH</em></label>
+        <label><span>湿度下限</span><input id="threshold-humidity-min" type="number" min="0" max="95" step="1"><em>%RH</em></label>
+        <label><span>原始气阻下限</span><input id="threshold-gas" type="number" min="0" max="10000000" step="100"><em>Ω</em></label>
+        <label><span>疑似发热筛查上限</span><input id="threshold-body-temperature" type="number" min="30" max="45" step="0.1"><em>°C</em></label>
+        <button type="submit" class="primary">保存门限</button>
+        <span id="environment-threshold-result"></span>
+      </form>
+
+      <div class="fusion-decision-grid">
+        <article><div class="panel-heading"><h2>并行场景状态</h2><span id="fusion-schema">规则 v1</span></div><div id="fusion-contexts" class="fusion-context-list"></div></article>
+        <article><div class="panel-heading"><h2>活动安全事件</h2><span id="fusion-evidence-sequence">证据 0</span></div><div id="fusion-incidents" class="fusion-incident-list"><p>无活动事件</p></div></article>
+        <article><div class="panel-heading"><h2>融合证据</h2><span id="fusion-presence-summary">等待融合数据</span></div><div id="fusion-evidence" class="fusion-evidence-list"><p>等待 RA8 融合证据</p></div></article>
+      </div>
+
+      <div class="section-heading sensor-health-heading">
+        <div><h1>传感器与采集链路诊断</h1><p>依据当前帧完整性、融合有效位和硬件通道位图判断，不使用累计错误数误报当前故障</p></div>
+        <span id="sensor-health-summary">等待诊断</span>
+      </div>
+      <div id="sensor-health-grid" class="sensor-health-grid"></div>
+
+      <div class="section-heading performance-heading">
+        <div><h1>趋势</h1><p id="history-range">最近遥测</p></div>
+        <div class="performance-recorder" aria-live="polite">
+          <span id="resource-recording-state">性能参数未记录</span>
+          <button id="resource-recording-start" type="button" class="primary">开始记录</button>
+          <button id="resource-recording-stop" type="button" disabled>停止记录</button>
+          <a id="resource-recording-download" class="button-link" href="#" hidden>下载 CSV</a>
+        </div>
+      </div>
+      <div class="chart-grid">
+        <article><h2>温度范围</h2><canvas id="temperature-chart" width="600" height="220"></canvas></article>
+        <article><h2>麦克风峰值</h2><canvas id="microphone-chart" width="600" height="220"></canvas></article>
+        <article><h2>压力载荷</h2><canvas id="pressure-chart" width="600" height="220"></canvas></article>
+        <article><h2>Wi-Fi 信号</h2><canvas id="wifi-chart" width="600" height="220"></canvas></article>
+        <article><h2>RA8 CPU / NPU 利用率</h2><canvas id="ra8-utilization-chart" width="600" height="220"></canvas></article>
+        <article><h2>RA8 双核 FreeRTOS 堆余量</h2><canvas id="ra8-heap-chart" width="600" height="220"></canvas></article>
+        <article><h2>BME688 温度</h2><canvas id="bme688-temperature-chart" width="600" height="220"></canvas></article>
+        <article><h2>BME688 湿度</h2><canvas id="bme688-humidity-chart" width="600" height="220"></canvas></article>
+        <article><h2>BME688 气压</h2><canvas id="bme688-pressure-chart" width="600" height="220"></canvas></article>
+        <article><h2>BME688 原始气阻（非 VOC/IAQ）</h2><canvas id="bme688-gas-chart" width="600" height="220"></canvas></article>
+      </div>
+
+      <div class="section-heading"><div><h1>空间数据</h1><p>热成像与压力矩阵使用独立二进制通道</p></div></div>
+      <div class="heatmap-grid">
+        <article>
+          <div class="matrix-heading"><h2>热成像 80×64</h2><output id="thermal-hover">移动鼠标查看温度</output></div>
+          <canvas id="thermal" width="640" height="512"></canvas><small id="thermal-range">无数据</small>
+        </article>
+        <article>
+          <div class="matrix-heading"><h2>压力矩阵 16×16</h2><output id="pressure-hover">移动鼠标查看压力</output></div>
+          <div class="pressure-display-controls">
+            <button id="pressure-calibrate" type="button">空床校准</button>
+            <button id="pressure-calibration-clear" type="button">清除基线</button>
+            <label>显示阈值 <input id="pressure-threshold" type="range" min="0" max="16" step="1" value="0"><output id="pressure-threshold-value">0</output></label>
+            <label>低压增强 <input id="pressure-sensitivity" type="range" min="1" max="8" step="1" value="4"><output id="pressure-sensitivity-value">4×</output></label>
+            <label>峰值保持 <input id="pressure-hold" type="range" min="0" max="2000" step="250" value="1000"><output id="pressure-hold-value">1.0 s</output></label>
+            <span id="pressure-calibration-state">未校准，显示原始低端变化</span>
+          </div>
+          <canvas id="pressure" width="640" height="512"></canvas><small id="pressure-range">无数据</small>
+        </article>
+      </div>
+    </section>
+
+    <section id="media" class="view">
+      <div class="section-heading media-heading">
+        <div><h1>ESP32-P4X-EYE 实时音视频</h1><p>音频和视频使用相互独立的 WSS 通道；有浏览器订阅时才通知网关采集，不进入遥测 JSON 或数据库</p></div>
+        <span id="media-state">等待 P4 媒体连接</span>
+      </div>
+
+      <div class="metric-grid media-metric-grid">
+        <article><label>P4 视频上传</label><strong id="s3-video-state">未连接</strong><small id="s3-video-detail">WSS 上传器 0</small></article>
+        <article><label>视频订阅</label><strong id="video-listener-state">未开启</strong><small id="video-listener-detail">订阅者 0</small></article>
+        <article><label>JPEG 帧</label><strong id="video-frame-state">0</strong><small id="video-frame-detail">序列 - · 0 帧间断</small></article>
+        <article><label>画面规格</label><strong id="video-format-state">-</strong><small id="video-format-detail">等待第一帧</small></article>
+        <article><label>P4 音频上传</label><strong id="s3-audio-state">未连接</strong><small id="s3-audio-detail">WSS 上传器 0</small></article>
+        <article><label>浏览器监听</label><strong id="audio-listener-state">未开启</strong><small id="audio-listener-detail">订阅者 0</small></article>
+        <article><label>接收帧</label><strong id="audio-frame-state">0</strong><small id="audio-frame-detail">序列 - · 0 帧间断</small></article>
+        <article><label>相对传输延迟</label><strong id="audio-latency">-</strong><small>相对本次连接的最短路径估算</small></article>
+        <article><label>播放缓冲</label><strong id="audio-buffer">-</strong><small id="audio-buffer-detail">目标 60–80 ms</small></article>
+        <article><label>播放异常</label><strong id="audio-playback-errors">0</strong><small id="audio-playback-detail">欠载 0 · 浏览器丢弃 0</small></article>
+      </div>
+
+      <div class="media-grid live-media-grid">
+        <article class="video-panel">
+          <div class="media-panel-title video-panel-title"><strong>摄像头实时画面</strong><span id="video-runtime">尚未预览</span></div>
+          <div id="video-stage" class="video-stage">
+            <img id="video-preview" alt="ESP32-P4X-EYE 摄像头实时画面">
+            <canvas id="live-thermal-overlay" class="live-thermal-overlay" aria-hidden="true"></canvas>
+            <div id="live-vision-overlay" class="live-vision-overlay" aria-hidden="true"></div>
+          </div>
+          <span id="overlay-runtime" class="overlay-runtime">检测框等待中</span>
+          <div id="video-empty" class="empty"><strong>等待视频</strong><small>进入本页后将自动请求 P4 开始上传</small></div>
+          <div class="video-controls"><button id="video-toggle">停止预览</button><span id="video-detail">S3MD JPEG · 最新帧优先</span></div>
+        </article>
+        <article class="audio-panel">
+          <div class="media-panel-title"><strong>麦克风实时监听</strong><span id="audio-runtime">尚未监听</span></div>
+          <canvas id="audio-meter" width="720" height="180"></canvas>
+          <div class="audio-controls">
+            <button id="audio-toggle">开始监听</button>
+            <label for="audio-volume">监听音量</label>
+            <input id="audio-volume" type="range" min="0" max="1.5" step="0.05" value="1">
+            <span id="audio-detail">16 kHz · 单声道 · PCM16 · 20 ms/帧</span>
+          </div>
+        </article>
+      </div>
+
+      <article class="overlay-calibration-panel">
+        <div class="panel-heading"><div><h2>RA8 / P4 叠加映射</h2><span id="overlay-calibration-status">同坐标预览</span></div><label class="toggle-field"><input id="overlay-enabled" type="checkbox" checked><span>显示检测框</span></label></div>
+        <div class="overlay-calibration-toolbar"><label>映射模式<select id="overlay-mode"><option value="identity">同坐标</option><option value="homography">四点映射</option></select></label><button id="overlay-save" type="button" class="primary">保存映射</button><span id="overlay-save-result"></span></div>
+        <div class="table-wrap overlay-points-table"><table><thead><tr><th>对应点</th><th>RA8 X</th><th>RA8 Y</th><th>P4 X</th><th>P4 Y</th></tr></thead><tbody id="overlay-point-rows"></tbody></table></div>
+        <div class="thermal-overlay-controls">
+          <label class="toggle-field"><input id="thermal-overlay-enabled" type="checkbox"><span>叠加热成像</span></label>
+          <label>透明度 <input id="thermal-overlay-opacity" type="range" min="0.05" max="0.8" step="0.01" value="0.32"><output id="thermal-overlay-opacity-value">32%</output></label>
+        </div>
+        <div class="table-wrap overlay-points-table"><table><thead><tr><th>热成像标定点</th><th>热图 X</th><th>热图 Y</th><th>P4 X</th><th>P4 Y</th></tr></thead><tbody id="thermal-overlay-point-rows"></tbody></table></div>
+      </article>
+
+      <div class="media-note"><strong>实时优先</strong><span>服务器和浏览器队列都采用有界缓冲；网络拥塞时丢弃旧帧，停止监听或切换设备会立即释放订阅。</span></div>
+    </section>
+
+    <section id="recordings" class="view">
+      <div class="section-heading recording-heading">
+        <div><h1>麦克风与摄像头录制测试</h1><p>直接控制 RA8 将 WAV/JPEG 写入 CPU1 的 SD 卡，不创建训练会话，也不把媒体文件上传服务器</p></div>
+        <span id="recording-page-state">等待设备状态</span>
+      </div>
+
+      <div class="metric-grid recording-metric-grid">
+        <article><label>当前设备</label><strong id="recording-device-state">未选择</strong><small id="recording-device-detail">-</small></article>
+        <article><label>RA8 链路</label><strong id="recording-ra8-state">未知</strong><small id="recording-ra8-detail">命令通过网关转发</small></article>
+        <article><label>CPU1 SD 卡</label><strong id="recording-sd-state">等待新固件</strong><small id="recording-sd-detail">初始化阶段与错误码</small></article>
+        <article><label>麦克风写入器</label><strong id="recording-audio-state">等待状态</strong><small id="recording-audio-detail">-</small></article>
+        <article><label>摄像头写入器</label><strong id="recording-camera-state">等待状态</strong><small id="recording-camera-detail">-</small></article>
+      </div>
+
+      <div class="recording-control-grid">
+        <article class="recording-card" data-recording-card="audio">
+          <div class="recording-card-title"><div><span>WAV</span><h2>RA8 麦克风录音</h2></div><strong id="recording-audio-active">未录音</strong></div>
+          <label class="recording-filename"><span>自定义文件名</span><input id="recording-audio-filename" maxlength="8" spellcheck="false" autocomplete="off" placeholder="例如 CRY0001"><button type="button" data-generate-name="audio">生成短名</button></label>
+          <p class="recording-path">预计保存：<code id="recording-audio-path">/MIC/自动编号.WAV</code></p>
+          <div class="recording-actions">
+            <button type="button" class="primary" data-recording-kind="audio" data-recording-action="start">开始录音</button>
+            <button type="button" data-recording-kind="audio" data-recording-action="stop">停止并关闭 WAV</button>
+          </div>
+          <dl class="recording-status-list">
+            <dt>实际文件</dt><dd id="recording-audio-file">-</dd>
+            <dt>录音时长</dt><dd id="recording-audio-seconds">0 秒</dd>
+            <dt>采集 / 写入</dt><dd id="recording-audio-bytes">0 B / 0 B</dd>
+            <dt>命令序列</dt><dd id="recording-audio-command">-</dd>
+            <dt>写入错误</dt><dd id="recording-audio-error">0</dd>
+          </dl>
+          <p id="recording-audio-result" class="recording-result">尚未下发命令</p>
+        </article>
+
+        <article class="recording-card" data-recording-card="camera">
+          <div class="recording-card-title"><div><span>JPEG</span><h2>串口摄像头抓图</h2></div><strong id="recording-camera-active">未连续采集</strong></div>
+          <label class="recording-filename"><span>自定义文件名</span><input id="recording-camera-filename" maxlength="8" spellcheck="false" autocomplete="off" placeholder="例如 CAM0001"><button type="button" data-generate-name="camera">生成短名</button></label>
+          <p class="recording-path">预计保存：<code id="recording-camera-path">/CAMERA/自动编号.JPG</code></p>
+          <div class="recording-actions">
+            <button type="button" class="primary" data-recording-kind="camera" data-recording-action="capture">拍摄一张</button>
+            <button type="button" data-recording-kind="camera" data-recording-action="start">开始连续抓图</button>
+            <button type="button" data-recording-kind="camera" data-recording-action="stop">停止连续抓图</button>
+          </div>
+          <dl class="recording-status-list">
+            <dt>实际文件</dt><dd id="recording-camera-file">-</dd>
+            <dt>抓取 / 保存</dt><dd id="recording-camera-count">0 / 0 帧</dd>
+            <dt>JPEG 校验</dt><dd id="recording-camera-jpeg">SOI - / EOI -</dd>
+            <dt>命令序列</dt><dd id="recording-camera-command">-</dd>
+            <dt>抓图 / 写入错误</dt><dd id="recording-camera-error">0 / 0</dd>
+          </dl>
+          <p id="recording-camera-result" class="recording-result">尚未下发命令</p>
+        </article>
+      </div>
+
+      <div class="media-note recording-note"><strong>文件名规则</strong><span>可输入 1–8 个英文字母、数字、下划线或连字符，扩展名可省略；同名文件不会覆盖。严格使用 FAT 8.3 文件名，留空时使用 M0000001.WAV / C0000001.JPG 自动编号。</span></div>
+
+      <div class="section-heading"><div><h1>最近录制测试命令</h1><p>“已确认”只代表网关已转发；文件是否真正创建请以上方 RA8 写入状态和实际文件名为准</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>时间</th><th>通道</th><th>操作</th><th>文件名</th><th>状态</th><th>结果</th></tr></thead><tbody id="recording-command-rows"></tbody></table></div>
+    </section>
+
+    <section id="ai" class="view">
+      <div class="section-heading">
+        <div><h1>大模型助手</h1><p>模型密钥只保存在服务端；本地安全融合和硬件告警始终优先</p></div>
+        <span id="ai-runtime-state">等待服务端状态</span>
+      </div>
+      <div class="ai-grid">
+        <article>
+          <div class="panel-heading"><div><h2>故事生成与扬声器播放</h2><span>Qwen 文本生成 + TTS + RA8 SD 播放</span></div></div>
+          <form id="ai-story-form" class="ai-form">
+            <label>故事主题<input id="ai-story-theme" maxlength="120" placeholder="例如：月亮和小云朵" required></label>
+            <label>婴儿月龄<input id="ai-story-age" type="number" min="0" max="72" value="12" required></label>
+            <label>目标时长<select id="ai-story-duration"><option value="30">约 30 秒</option><option value="45">约 45 秒</option><option value="60" selected>约 60 秒</option><option value="90">约 90 秒</option><option value="120">约 120 秒</option><option value="180">约 3 分钟</option><option value="240">约 4 分钟</option></select></label>
+            <label>风格<select id="ai-story-style"><option value="calm">安静</option><option value="gentle">温柔</option><option value="playful">轻快</option></select></label>
+            <label class="toggle-field"><input id="ai-story-autoplay" type="checkbox" checked><span>生成后自动传给 RA8 播放</span></label>
+            <button type="submit" class="primary">生成故事</button>
+          </form>
+          <p id="ai-story-result" class="ai-result">尚未提交故事</p>
+          <div id="ai-story-list" class="ai-item-list"><p class="empty-state">暂无故事记录</p></div>
+        </article>
+        <article>
+          <div class="panel-heading"><div><h2>遥测综合评估</h2><span>只解释当前结构化状态，不替代本地安全决策</span></div><button id="ai-assess-now" type="button" class="primary">立即评估</button></div>
+          <p id="ai-assessment-result" class="ai-result">等待自动或手动评估</p>
+          <div id="ai-advisory-list" class="ai-item-list"><p class="empty-state">暂无评估记录</p></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="sensors" class="view">
+      <div class="section-heading"><div><h1>全部实时参数</h1><p>字段按设备原始分组展示，未知的新字段也会自动出现</p></div><button id="copy-json">复制原始 JSON</button></div>
+      <div class="command-bar">
+        <strong>实验控制</strong>
+        <button data-command="status.refresh">刷新 RA8 状态</button>
+        <button data-command="safety.test">测试告警</button>
+        <button data-command="ra8.command" data-payload="mic_start">开始麦克风采样</button>
+        <button data-command="ra8.command" data-payload="mic_stop">停止麦克风采样</button>
+        <label class="speaker-volume-control">扬声器音量 <input id="speaker-volume" type="range" min="0" max="100" step="1" value="100"><output id="speaker-volume-value">100%</output></label>
+        <span id="speaker-volume-result"></span>
+        <input id="raw-command" placeholder="RA8 原始命令，例如 status">
+        <button id="send-command">发送</button>
+        <span id="command-result"></span>
+      </div>
+      <div id="parameter-groups" class="parameter-groups"></div>
+      <details class="raw-json"><summary>原始遥测 JSON</summary><pre id="raw-json"></pre></details>
+      <div class="section-heading"><div><h1>命令记录</h1><p>查看排队、重投、确认和失败结果</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>ID</th><th>创建时间</th><th>命令</th><th>状态</th><th>发送次数</th><th>结果</th></tr></thead><tbody id="command-rows"></tbody></table></div>
+    </section>
+
+    <section id="events" class="view">
+      <div class="section-heading"><div><h1>告警事件</h1><p>服务器按设备事件 ID 去重</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>时间</th><th>类型</th><th>状态</th><th>级别</th><th>置信度</th><th>来源</th><th>处理</th></tr></thead><tbody id="event-rows"></tbody></table></div>
+    </section>
+
+    <section id="logs" class="view">
+      <div class="section-heading"><div><h1>设备与链路日志</h1><p>连接、固件日志及最近遥测活动</p></div><span id="log-count">0 条</span></div>
+      <div class="log-layout">
+        <div class="table-wrap"><table><thead><tr><th>时间</th><th>级别</th><th>组件</th><th>信息</th><th>上下文</th></tr></thead><tbody id="log-rows"></tbody></table></div>
+        <aside id="activity-feed" class="activity-feed"></aside>
+      </div>
+    </section>
+
+    <section id="datasets" class="view">
+      <div class="section-heading"><div><h1>数据集与算法实验</h1><p>正式模型数据与规则设计参考信号分开管理，标签、文件和训练划分保持可追溯</p></div><span id="collection-result">等待操作</span></div>
+
+      <div class="workflow-guide">
+        <article class="confirmed"><span>正式模型数据</span><strong>哭声音频 + 视觉图像</strong><p>采集后从 RA8 SD 卡导入 WAV/JPEG，逐样本复核标签、质量及 train / validation / test 划分。</p></article>
+        <article><span>算法设计参考</span><strong>温度 + 压力 + 热成像</strong><p>用于观察状态、确定阈值与设计规则，不默认当作模型训练样本。</p></article>
+        <article class="candidate"><span>候选方向</span><strong>多模态融合模型</strong><p>当前只保留数据兼容性和模型入口，待单模态效果与数据规模明确后再决定是否训练。</p></article>
+      </div>
+
+      <form id="collection-form" class="collection-context">
+        <div class="collection-form-heading"><strong>本轮实验条件</strong><span>开始任一通道时锁定到该通道自己的会话；其他通道仍可独立开始和停止</span></div>
+        <label><span>任务</span><select id="collection-task">
+          <option value="vision_scene">视觉：场景目标</option>
+          <option value="vision_occlusion">视觉：口鼻遮挡</option>
+          <option value="vision_behavior">视觉：姿态行为</option>
+          <option value="cry_detection">音频：哭声检测</option>
+          <option value="cry_type">音频：哭声类型</option>
+          <option value="rule_reference">融合规则参考</option>
+        </select></label>
+        <label><span>主标签 / 场景标记</span><input id="collection-label" list="collection-label-options" placeholder="模型数据必填；可按下方条件自动建议"></label>
+        <label><span>本轮数据划分</span><select id="collection-split"><option value="train">训练集</option><option value="validation">验证集</option><option value="test">测试集</option><option value="unassigned">暂不划分</option></select></label>
+        <label><span>假人状态</span><select id="collection-subject"><option value="present">在床</option><option value="absent">空床</option></select></label>
+        <label><span>姿态</span><select id="collection-posture"><option value="lying_supine">仰卧</option><option value="lying_side">侧卧</option><option value="sitting">坐姿</option><option value="crawling_kneeling">爬行/跪姿</option><option value="standing">站立</option><option value="none">无假人</option></select></label>
+        <label><span>床面位置</span><select id="collection-region"><option value="center">中央</option><option value="head">床头</option><option value="foot">床尾</option><option value="left_edge">左边缘</option><option value="right_edge">右边缘</option><option value="outside">床外</option></select></label>
+        <label><span>毛巾/毯子</span><select id="collection-blanket"><option value="none">无</option><option value="body_only">仅盖身体</option><option value="partial_face">部分遮脸</option><option value="full_face">完全遮脸</option><option value="nearby">仅放在旁边</option></select></label>
+        <label><span>加热状态</span><select id="collection-heater"><option value="off">关闭</option><option value="warming">升温中</option><option value="stable_low">低温稳定</option><option value="stable_high">高温稳定</option></select></label>
+        <label><span>声音场景</span><select id="collection-audio-scene"><option value="quiet">安静</option><option value="cry_playback">哭声播放</option><option value="adult_speech">成人说话</option><option value="shout">大声喊叫</option><option value="music">音乐/故事</option><option value="environment">环境噪声</option></select></label>
+        <label><span>照护者</span><select id="collection-caregiver"><option value="absent">不在画面</option><option value="present">在画面</option></select></label>
+        <label><span>重复编号</span><input id="collection-repeat" value="1" inputmode="numeric" pattern="[0-9]+" title="同一条件的独立重复轮次"></label>
+        <label class="collection-description"><span>实验条件与备注</span><input id="collection-description" placeholder="例如光照、房间、毛巾折法、加热器档位和异常情况"></label>
+        <div class="collection-form-actions"><button id="collection-suggest-label" type="button">按条件建议标签</button><button id="empty-bed-calibrate" type="button">空床压力校准</button><span id="collection-label-help">按完整会话划分训练/验证/测试，避免同一连续片段泄漏到不同集合。</span></div>
+        <datalist id="collection-label-options">
+          <option value="infant"><option value="empty_bed"><option value="blanket"><option value="soft_object"><option value="caregiver">
+        </datalist>
+      </form>
+
+      <div id="collection-channels">
+        <div class="collection-group model-group">
+          <div class="collection-group-heading"><div><h2>正式模型数据集</h2><p>标签必填；媒体先写入 RA8 SD 卡，停止后在下方导入原文件。</p></div><span class="workflow-badge model">用于训练</span></div>
+          <div class="collection-channels">
+            <article data-kind="camera" data-workflow="model_dataset"><div><strong>视觉图像（串口摄像头）</strong><small>未采集</small><em>/CAMERA/C*.JPG</em></div><div class="actions"><button type="button" data-action="start" class="primary">开始</button><button type="button" data-action="stop" disabled>停止</button></div></article>
+            <article data-kind="audio" data-workflow="model_dataset"><div><strong>哭声音频（RA8 麦克风）</strong><small>未采集</small><em>/MIC/M*.WAV</em></div><div class="actions"><button type="button" data-action="start" class="primary">开始</button><button type="button" data-action="stop" disabled>停止</button></div></article>
+          </div>
+        </div>
+
+        <div class="collection-group reference-group">
+          <div class="collection-group-heading"><div><h2>算法设计参考信号</h2><p>场景标记可选；保留同步时间、矩阵原始值与实验条件，便于后续确定阈值和规则。</p></div><span class="workflow-badge reference">非模型优先</span></div>
+          <div class="collection-channels">
+            <article data-kind="temperature" data-workflow="reference_signal"><div><strong>床面温度</strong><small>未采集</small><em>服务器时序样本</em></div><div class="actions"><button type="button" data-action="start" class="primary">开始</button><button type="button" data-action="stop" disabled>停止</button></div></article>
+            <article data-kind="thermal" data-workflow="reference_signal"><div><strong>热成像矩阵</strong><small>未采集</small><em>80×64 int16</em></div><div class="actions"><button type="button" data-action="start" class="primary">开始</button><button type="button" data-action="stop" disabled>停止</button></div></article>
+            <article data-kind="pressure" data-workflow="reference_signal"><div><strong>压力矩阵</strong><small>未采集</small><em>16×16 int16</em></div><div class="actions"><button type="button" data-action="start" class="primary">开始</button><button type="button" data-action="stop" disabled>停止</button></div></article>
+          </div>
+        </div>
+      </div>
+
+      <div class="fusion-note"><strong>多模态融合采用可解释规则</strong><span>正式模型负责视觉与哭声；压力、热成像、床温和环境量作为同步证据。原始数据按通道独立保存，服务端依据会话时间窗关联，不把不同来源强行混成单一样本。</span></div>
+
+      <div class="section-heading"><div><h1>采集记录</h1><p>模型会话显示 SD 待导入数量和已导入原文件数量；参考会话显示时序/矩阵样本数。</p></div></div>
+      <div id="session-list" class="list"></div>
+
+      <div id="sd-import-panel" class="sd-import-panel" hidden>
+        <div><strong>导入 RA8 SD 原文件</strong><p id="sd-import-help">选择当前会话对应的 JPEG 或 WAV；文件名排序后会依次匹配 SD 待导入样本。</p></div>
+        <input id="sd-import-files" type="file" multiple>
+        <button id="sd-import-start" type="button" class="primary">上传所选文件</button>
+        <span id="sd-import-result">尚未选择文件</span>
+      </div>
+
+      <div class="section-heading"><div><h1>样本复核与标注</h1><p id="sample-session">选择一个采集会话查看样本</p></div><span id="sample-count">0 条</span></div>
+      <div class="table-wrap"><table><thead><tr><th>时间</th><th>类型</th><th>文件 / 来源</th><th>标签</th><th>训练划分</th><th>质量</th><th>备注</th><th>操作</th></tr></thead><tbody id="sample-rows"></tbody></table></div>
+    </section>
+
+    <section id="models" class="view">
+      <div class="section-heading">
+        <div><h1>RA8 视觉模型实时效果</h1><p>点击“录制测试”中的单张拍摄或连续抓图后，这里显示串口 JPEG 在 RA8P1 上的真实 NPU 输出</p></div>
+        <span id="vision-live-state">等待视觉遥测</span>
+      </div>
+      <div class="vision-live-grid">
+        <article class="vision-runtime-card">
+          <span>推理链路</span>
+          <strong id="vision-pipeline-state">等待固件</strong>
+          <p id="vision-pipeline-detail">尚未收到视觉状态</p>
+          <dl>
+            <dt>模型就绪</dt><dd id="vision-model-ready">0 / 3</dd>
+            <dt>帧 / 推理</dt><dd id="vision-frame-count">-</dd>
+            <dt>图像</dt><dd id="vision-image-size">-</dd>
+            <dt>OSPI / 加载</dt><dd id="vision-ospi-state">-</dd>
+          </dl>
+        </article>
+        <article>
+          <span>场景检测 · YOLOX-Tiny</span>
+          <div id="vision-scene-scores" class="vision-score-list"></div>
+        </article>
+        <article>
+          <span>口鼻遮挡 · MobileNetV3</span>
+          <strong id="vision-occlusion-class">等待目标框</strong>
+          <p id="vision-occlusion-detail">clear / partial / covered / not_visible</p>
+          <div id="vision-occlusion-scores" class="vision-score-list compact"></div>
+        </article>
+        <article>
+          <span>行为状态 · MobileNetV3</span>
+          <strong id="vision-behavior-class">等待目标框</strong>
+          <p id="vision-behavior-detail">lying / sitting / crawling_kneeling / standing / unknown</p>
+          <div id="vision-behavior-scores" class="vision-score-list compact"></div>
+        </article>
+      </div>
+      <div class="vision-result-row">
+        <article>
+          <div class="vision-card-heading"><strong>当前目标框</strong><span id="vision-detection-count">0 个</span></div>
+          <div id="vision-box-preview" class="vision-box-preview">
+            <div class="vision-box-grid"></div>
+            <div id="vision-box-empty" class="vision-box-empty">等待第一帧坐标</div>
+            <div id="vision-box-layer" class="vision-box-layer"></div>
+          </div>
+          <p class="vision-box-note">这是按原始 JPEG 尺寸还原的目标框坐标预览；串口 JPEG 当前仅写入 SD 卡，网页不上传原图。</p>
+          <div class="table-wrap"><table><thead><tr><th>类别</th><th>置信度</th><th>x</th><th>y</th><th>宽</th><th>高</th></tr></thead><tbody id="vision-detection-rows"><tr><td colspan="6">等待第一帧</td></tr></tbody></table></div>
+        </article>
+        <article>
+          <div class="vision-card-heading"><strong>处理耗时</strong><span id="vision-total-time">-</span></div>
+          <dl class="vision-timing-list">
+            <dt>JPEG 解码</dt><dd id="vision-time-decode">-</dd>
+            <dt>场景预处理</dt><dd id="vision-time-preprocess">-</dd>
+            <dt>场景检测</dt><dd id="vision-time-scene">-</dd>
+            <dt>遮挡分类</dt><dd id="vision-time-occlusion">-</dd>
+            <dt>行为分类</dt><dd id="vision-time-behavior">-</dd>
+            <dt>错误 / 丢帧</dt><dd id="vision-error-count">-</dd>
+          </dl>
+        </article>
+      </div>
+      <p class="vision-calibration-note"><strong>融合状态：</strong><span id="vision-fusion-state">有效视觉帧已进入质量门控和多模态融合；模型置信度与当前事件会在上方同步显示。</span></p>
+
+      <div class="section-heading">
+        <div><h1>RA8 声音模型实时效果</h1><p>显示板端哭声二分类、实验性哭声类型分类和麦克风输入质量，不上传原始训练音频。</p></div>
+        <span id="cry-live-state">等待声音遥测</span>
+      </div>
+      <div class="vision-live-grid">
+        <article class="vision-runtime-card">
+          <span>声音推理链路</span>
+          <strong id="cry-pipeline-state">等待固件</strong>
+          <p id="cry-pipeline-detail">尚未收到哭声模型状态</p>
+          <dl>
+            <dt>模型就绪</dt><dd id="cry-model-ready">0 / 2</dd>
+            <dt>二分类版本</dt><dd id="cry-model-version">-</dd>
+            <dt>类型模型版本</dt><dd id="cry-type-model-version">-</dd>
+            <dt>推理</dt><dd id="cry-inference-count">-</dd>
+          </dl>
+        </article>
+        <article>
+          <span>哭声检测 · 二分类</span>
+          <strong id="cry-model-class">等待模型</strong>
+          <p id="cry-model-detail">crying / non_crying</p>
+          <div id="cry-binary-scores" class="vision-score-list compact"></div>
+        </article>
+        <article>
+          <span>哭声类型 · 实验模型</span>
+          <strong id="cry-type-model-class">等待模型</strong>
+          <p id="cry-type-model-detail">低置信度时保持 unknown</p>
+          <div id="cry-type-model-scores" class="vision-score-list compact"></div>
+        </article>
+        <article>
+          <span>麦克风输入质量</span>
+          <strong id="cry-input-state">等待采样</strong>
+          <p id="cry-input-detail">峰值、平均幅值和读取错误</p>
+          <dl>
+            <dt>峰值 / 平均</dt><dd id="cry-input-level">-</dd>
+            <dt>读取 / 错误</dt><dd id="cry-input-counters">-</dd>
+            <dt>最近推理耗时</dt><dd id="cry-inference-time">-</dd>
+          </dl>
+        </article>
+      </div>
+
+      <div class="section-heading"><div><h1>模型包</h1><p>管理哭声与视觉训练产物；融合模型仍作为未来候选。</p></div></div>
+      <div class="model-roadmap">
+        <article><span>模型 1</span><strong>哭声识别</strong><p>输入实时音频特征，输出哭声确认与疑似声学类别。</p></article>
+        <article><span>视觉 1–3</span><strong>场景 + 遮挡 + 行为</strong><p>串口 JPEG 经 YOLOX-Tiny 定位，再按 ROI 运行两个 MobileNetV3 分类器。</p></article>
+        <article class="future"><span>候选</span><strong>状态融合</strong><p>待单模态模型与规则算法稳定后，再评估是否需要训练。</p></article>
+      </div>
+      <form id="model-form"><input id="model-name" placeholder="模型名称" required><input id="model-version" placeholder="版本" required><input id="model-target" value="ra8p1" placeholder="目标"><select id="model-task"><option value="cry_classification">哭声分类</option><option value="vision_classification">视觉分类</option><option value="vision_detection">视觉检测</option><option value="fusion">融合（候选）</option></select><input id="model-file" type="file" accept=".zip" required><button type="submit">上传模型包</button><span id="model-result"></span></form>
+      <div id="model-list" class="list"></div>
+    </section>
+  </main>
+  <script src="/static/telemetry-history.js?v=20260730-p4x-realtime-4"></script>
+  <script src="/static/thermal-display.js?v=20260731-thermal-quality-1"></script>
+  <script src="/static/matrix-display.js?v=20260801-pressure-ai-1"></script>
+  <script src="/static/app.js?v=20260821-resource-recording-1"></script>
+</body>
+</html>

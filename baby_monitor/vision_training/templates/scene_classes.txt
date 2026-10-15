@@ -1,0 +1,5 @@
+infant
+head_face
+blanket
+soft_object
+caregiver

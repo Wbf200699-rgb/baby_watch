@@ -1,0 +1,9 @@
+numpy>=1.26,<2.1
+Pillow>=10.2,<12
+PyYAML>=6.0,<7
+opencv-python-headless>=4.9,<5
+pytest>=8.0,<9
+
+# 分类模型训练与严格 INT8 TFLite 导出。Windows 原生 TensorFlow 使用 CPU；
+# 有 NVIDIA GPU 时，建议在 WSL2 中安装同版本依赖。
+tensorflow==2.19.0

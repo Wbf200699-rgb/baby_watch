@@ -1,0 +1,2 @@
+session_id,segment_id,start_ms,end_ms,subject_id,camera_id,posture_label,airway_label,position_zone,motion_label,caregiver_present,pressure_valid,thermal_valid,edge_load_valid,edge_event_label,quality,split,notes
+demo_v2,seg_000,0,30000,subject_demo,ra8_serial_camera,lying,clear,center,quiet,0,1,1,0,none,good,train,示例行

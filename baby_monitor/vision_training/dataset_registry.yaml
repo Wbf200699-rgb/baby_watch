@@ -1,0 +1,46 @@
+version: 1
+datasets:
+  cribhd:
+    title: CribHD
+    archive_url: https://coe.northeastern.edu/Research/AClab/CribHD/CribHD.zip
+    archive_size: 611M
+    archive_bytes: 640664878
+    sha256: c771c76755ebc39f090ad50d83a10c1e5cc0e8b979c21c75fcafc57f319e4f9f
+    archive_name: CribHD.zip
+    extract_dir: CribHD
+    access: direct
+    formats: [COCO, PascalVOC, YOLOv8]
+    subsets:
+      CribHD-T: toys
+      CribHD-B: blankets
+      CribHD-C: simulated_hazards_unlabelled
+    official_repository: https://github.com/ostadabbas/CribNet
+    use: blanket_and_soft_object_detection
+    terms_note: Official repository states non-commercial use; verify dataset terms before any commercial use.
+
+  syrip:
+    title: Synthetic and Real Infant Pose
+    archive_url: https://coe.northeastern.edu/Research/AClab/SyRIP/SyRIP.zip
+    archive_size: 313M
+    archive_bytes: 327912103
+    sha256: 1d13e816375988be9bbdab8bf5be6562a5b9bfa83684d57ccbfec9dd619e1692
+    archive_name: SyRIP.zip
+    extract_dir: SyRIP
+    access: direct_original_release
+    format: COCO_keypoints
+    official_repository: https://github.com/ostadabbas/Infant-Pose-Estimation
+    use: infant_and_head_detection
+    terms_note: Official repository states non-commercial use; verify dataset terms before any commercial use.
+
+  syrip_expanded:
+    title: Expanded SyRIP
+    archive_url: https://coe.northeastern.edu/Research/AClab/Expanded_SyRIP/expanded_SyRIP.zip
+    archive_size: 536M
+    archive_name: expanded_SyRIP.zip
+    extract_dir: Expanded_SyRIP
+    access: password_required
+    password_contact:
+      repository: https://github.com/ostadabbas/Infant-Pose-Estimation
+      email: ostadabbas@ece.neu.edu
+    use: optional_upgrade_after_original_syrip
+    password_environment_variable: SYRIP_ARCHIVE_PASSWORD

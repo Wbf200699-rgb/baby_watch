@@ -1,0 +1,7 @@
+dependencies:
+  idf: ">=5.5.3"
+  espressif/esp_websocket_client: "^1.6.0"
+  espressif/esp_hosted: "~2.12.11"
+  espressif/esp_wifi_remote: "^1.6.3"
+  esp32_p4_eye:
+    override_path: "../../vendor_esp_dev_kits/examples/esp32-p4-eye/examples/common_components/esp32_p4_eye"

@@ -1,0 +1,17 @@
+{$DOMAIN} {
+    encode zstd gzip
+
+    @dashboard not path /api/v1/* /health
+    basic_auth @dashboard {
+        {$ADMIN_USER} {$ADMIN_PASSWORD_HASH}
+    }
+
+    reverse_proxy app:8088
+
+    header {
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "DENY"
+        Referrer-Policy "same-origin"
+    }
+}

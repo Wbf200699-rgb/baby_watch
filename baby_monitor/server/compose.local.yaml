@@ -1,0 +1,6 @@
+services:
+  app:
+    ports:
+      - "${LOCAL_PORT:-8088}:8088"
+  caddy:
+    profiles: ["public"]

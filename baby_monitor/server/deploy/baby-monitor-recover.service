@@ -1,0 +1,12 @@
+[Unit]
+Description=Recover the baby monitor server after Docker or network startup races
+After=docker.service network-online.target tailscaled.service
+Wants=docker.service network-online.target tailscaled.service
+
+[Service]
+Type=oneshot
+User=zyx
+Group=zyx
+WorkingDirectory=/home/zyx/baby_monitor/server
+ExecStart=/bin/sh /home/zyx/baby_monitor/server/deploy/baby-monitor-recover.sh
+TimeoutStartSec=120

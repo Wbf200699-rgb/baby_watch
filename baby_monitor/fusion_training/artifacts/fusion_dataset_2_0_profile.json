@@ -1,0 +1,386 @@
+{
+  "profile": {
+    "profile_version": 539363331,
+    "archive_sha256": "F8EB1703083CB9F6E644F6500295AC449F1A79A218F733848AEA7E725DF44FCB",
+    "pressure_active_point": 1,
+    "pressure_confirm_frames": 2,
+    "pressure_release_frames": 32,
+    "pressure_edge_width": 2,
+    "pressure_edge_positive_x1000": 550,
+    "thermal_contrast_low_deci_c": 35,
+    "thermal_contrast_high_deci_c": 55,
+    "thermal_hotspot_delta_deci_c": 15,
+    "thermal_hotspot_p99_gap_deci_c": 25,
+    "thermal_hotspot_min_points": 8,
+    "thermal_hotspot_full_points": 176,
+    "thermal_contrast_weight_x1000": 850,
+    "thermal_area_weight_x1000": 150,
+    "thermal_bed_x_slope_x1000": -1432,
+    "thermal_bed_x_intercept_x1000": 1343,
+    "thermal_edge_low_x1000": 170,
+    "thermal_edge_high_x1000": 310,
+    "edge_pressure_weight": 450,
+    "edge_vision_weight": 400,
+    "edge_thermal_weight": 150,
+    "position_agreement_good_x1000": 120,
+    "position_agreement_bad_x1000": 400,
+    "thermal_anchor_x": {
+      "left": 0.805,
+      "center": 0.554,
+      "right": 0.386
+    },
+    "pressure_anchor_x": {
+      "left": 0.196635,
+      "center": 0.533333,
+      "right": 0.8
+    },
+    "mapped_anchor_x": {
+      "left": 0.190106,
+      "center": 0.549617,
+      "right": 0.790245
+    }
+  },
+  "metrics": {
+    "session_count": 24,
+    "pressure_frame_count": 7848,
+    "thermal_frame_count": 5432,
+    "bed_temperature_sample_count": 2613,
+    "invalid_payload_count": 0,
+    "pressure_empty_false_positive_frames": 0,
+    "pressure_empty_frames": 1986,
+    "thermal_negative_positive_frames": 0,
+    "thermal_negative_frames": 1065,
+    "pressure_by_label": {
+      "右侧站": {
+        "frames": 928,
+        "active_frames": 365,
+        "active_coverage": 0.393319,
+        "median_total_active": 451.0,
+        "median_edge_ratio_x1000_active": 1000.0
+      },
+      "右侧躺": {
+        "frames": 1267,
+        "active_frames": 656,
+        "active_coverage": 0.517758,
+        "median_total_active": 64.5,
+        "median_edge_ratio_x1000_active": 0.0
+      },
+      "婴儿在床中央": {
+        "frames": 1270,
+        "active_frames": 1270,
+        "active_coverage": 1.0,
+        "median_total_active": 71.0,
+        "median_edge_ratio_x1000_active": 0.0
+      },
+      "左侧站立": {
+        "frames": 855,
+        "active_frames": 282,
+        "active_coverage": 0.329825,
+        "median_total_active": 180.5,
+        "median_edge_ratio_x1000_active": 1000.0
+      },
+      "左侧躺": {
+        "frames": 1099,
+        "active_frames": 1098,
+        "active_coverage": 0.99909,
+        "median_total_active": 66.0,
+        "median_edge_ratio_x1000_active": 0.0
+      },
+      "空床": {
+        "frames": 1986,
+        "active_frames": 0,
+        "active_coverage": 0.0,
+        "median_total_active": 0.0,
+        "median_edge_ratio_x1000_active": 0.0
+      },
+      "翻动": {
+        "frames": 443,
+        "active_frames": 135,
+        "active_coverage": 0.30474,
+        "median_total_active": 129.0,
+        "median_edge_ratio_x1000_active": 2.0
+      }
+    },
+    "thermal_by_label": {
+      "加热器断电过程": {
+        "frames": 1032,
+        "median_contrast_deci_c": 99.5,
+        "median_score_x1000": 977.5,
+        "positive_coverage": 1.0
+      },
+      "加热过程": {
+        "frames": 568,
+        "median_contrast_deci_c": 110.0,
+        "median_score_x1000": 925.0,
+        "positive_coverage": 0.959507
+      },
+      "右侧站加热": {
+        "frames": 285,
+        "median_contrast_deci_c": 70.0,
+        "median_score_x1000": 935.0,
+        "positive_coverage": 0.631579
+      },
+      "右侧躺加热": {
+        "frames": 509,
+        "median_contrast_deci_c": 111.0,
+        "median_score_x1000": 931.0,
+        "positive_coverage": 1.0
+      },
+      "婴儿躺中心无加热": {
+        "frames": 530,
+        "median_contrast_deci_c": 30.0,
+        "median_score_x1000": 72.0,
+        "positive_coverage": 0.0
+      },
+      "左侧站加热": {
+        "frames": 391,
+        "median_contrast_deci_c": 31.0,
+        "median_score_x1000": 94.0,
+        "positive_coverage": 0.033248
+      },
+      "左侧躺加热": {
+        "frames": 533,
+        "median_contrast_deci_c": 113.0,
+        "median_score_x1000": 934.0,
+        "positive_coverage": 1.0
+      },
+      "空床": {
+        "frames": 535,
+        "median_contrast_deci_c": 31.0,
+        "median_score_x1000": 81.0,
+        "positive_coverage": 0.0
+      },
+      "躺中间加热全遮面": {
+        "frames": 543,
+        "median_contrast_deci_c": 135.0,
+        "median_score_x1000": 933.0,
+        "positive_coverage": 1.0
+      },
+      "躺中间加热部分遮面": {
+        "frames": 506,
+        "median_contrast_deci_c": 105.0,
+        "median_score_x1000": 988.0,
+        "positive_coverage": 1.0
+      }
+    }
+  },
+  "sessions": [
+    {
+      "archive": "数据集2.0/压力/右侧站/session_1bb6e0544fbf49e1.zip",
+      "session_id": "session_1bb6e0544fbf49e1",
+      "modality": "压力",
+      "label": "右侧站",
+      "sample_count": 928,
+      "started_at": "2026-08-01T16:35:11.728+00:00",
+      "ended_at": "2026-08-01T16:39:22.478+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/右侧躺/session_d336efad0820465e.zip",
+      "session_id": "session_d336efad0820465e",
+      "modality": "压力",
+      "label": "右侧躺",
+      "sample_count": 1267,
+      "started_at": "2026-08-01T16:22:47.469+00:00",
+      "ended_at": "2026-08-01T16:28:17.172+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/婴儿在床中央/session_d2e4e3635ab54edc.zip",
+      "session_id": "session_d2e4e3635ab54edc",
+      "modality": "压力",
+      "label": "婴儿在床中央",
+      "sample_count": 1270,
+      "started_at": "2026-08-01T15:50:51.737+00:00",
+      "ended_at": "2026-08-01T15:56:50.804+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/左侧站立/session_38377ad0a3b5476a.zip",
+      "session_id": "session_38377ad0a3b5476a",
+      "modality": "压力",
+      "label": "左侧站立",
+      "sample_count": 855,
+      "started_at": "2026-08-01T16:30:14.882+00:00",
+      "ended_at": "2026-08-01T16:34:03.220+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/左侧躺/session_acdf9e08ddef46db.zip",
+      "session_id": "session_acdf9e08ddef46db",
+      "modality": "压力",
+      "label": "左侧躺",
+      "sample_count": 1099,
+      "started_at": "2026-08-01T16:11:44.975+00:00",
+      "ended_at": "2026-08-01T16:16:52.993+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/空床/session_1a40a90cb78d4d6b.zip",
+      "session_id": "session_1a40a90cb78d4d6b",
+      "modality": "压力",
+      "label": "空床",
+      "sample_count": 1237,
+      "started_at": "2026-08-01T15:34:32.270+00:00",
+      "ended_at": "2026-08-01T15:39:44.531+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/空床/session_37dd80ecb55f4cd2.zip",
+      "session_id": "session_37dd80ecb55f4cd2",
+      "modality": "压力",
+      "label": "空床",
+      "sample_count": 749,
+      "started_at": "2026-08-01T15:30:33.278+00:00",
+      "ended_at": "2026-08-01T15:33:43.598+00:00"
+    },
+    {
+      "archive": "数据集2.0/压力/翻动/session_16b3a9f798e04fd2.zip",
+      "session_id": "session_16b3a9f798e04fd2",
+      "modality": "压力",
+      "label": "翻动",
+      "sample_count": 443,
+      "started_at": "2026-08-01T16:55:01.897+00:00",
+      "ended_at": "2026-08-01T16:57:11.044+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/右侧躺加热/session_88da66faa6ce4a27.zip",
+      "session_id": "session_88da66faa6ce4a27",
+      "modality": "床温",
+      "label": "右侧躺加热",
+      "sample_count": 200,
+      "started_at": "2026-08-01T19:16:39.464+00:00",
+      "ended_at": "2026-08-01T19:22:03.102+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/左侧躺加热/session_489c6faef3604561.zip",
+      "session_id": "session_489c6faef3604561",
+      "modality": "床温",
+      "label": "左侧躺加热",
+      "sample_count": 597,
+      "started_at": "2026-08-01T19:10:17.773+00:00",
+      "ended_at": "2026-08-01T19:15:49.896+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/空床/session_6b9b5b7305f4435d.zip",
+      "session_id": "session_6b9b5b7305f4435d",
+      "modality": "床温",
+      "label": "空床",
+      "sample_count": 0,
+      "started_at": "2026-08-01T19:23:31.726+00:00",
+      "ended_at": "2026-08-01T19:28:44.605+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/躺中心加热全遮脸/session_4367ab54813c4795.zip",
+      "session_id": "session_4367ab54813c4795",
+      "modality": "床温",
+      "label": "躺中心加热全遮脸",
+      "sample_count": 549,
+      "started_at": "2026-08-01T19:02:18.149+00:00",
+      "ended_at": "2026-08-01T19:07:39.986+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/躺中心加热盖被/session_fa61d944bda743ae.zip",
+      "session_id": "session_fa61d944bda743ae",
+      "modality": "床温",
+      "label": "躺中心加热盖被",
+      "sample_count": 592,
+      "started_at": "2026-08-01T18:46:56.246+00:00",
+      "ended_at": "2026-08-01T18:52:11.107+00:00"
+    },
+    {
+      "archive": "数据集2.0/床温/躺中心部分遮脸/session_80afce0ea00d4289.zip",
+      "session_id": "session_80afce0ea00d4289",
+      "modality": "床温",
+      "label": "躺中心部分遮脸",
+      "sample_count": 675,
+      "started_at": "2026-08-01T18:55:29.766+00:00",
+      "ended_at": "2026-08-01T19:01:15.344+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/加热器断电过程/session_7f218a0430c8476a.zip",
+      "session_id": "session_7f218a0430c8476a",
+      "modality": "热成像",
+      "label": "加热器断电过程",
+      "sample_count": 1032,
+      "started_at": "2026-08-01T18:06:02.358+00:00",
+      "ended_at": "2026-08-01T18:15:03.294+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/加热过程/session_fb5e6968f64b42b2.zip",
+      "session_id": "session_fb5e6968f64b42b2",
+      "modality": "热成像",
+      "label": "加热过程",
+      "sample_count": 568,
+      "started_at": "2026-08-01T17:23:18.252+00:00",
+      "ended_at": "2026-08-01T17:28:32.205+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/右侧站加热/session_4130e5b262b94517.zip",
+      "session_id": "session_4130e5b262b94517",
+      "modality": "热成像",
+      "label": "右侧站加热",
+      "sample_count": 285,
+      "started_at": "2026-08-01T18:41:14.503+00:00",
+      "ended_at": "2026-08-01T18:43:43.845+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/右侧躺加热/session_be010e6894564e51.zip",
+      "session_id": "session_be010e6894564e51",
+      "modality": "热成像",
+      "label": "右侧躺加热",
+      "sample_count": 509,
+      "started_at": "2026-08-01T17:44:46.100+00:00",
+      "ended_at": "2026-08-01T17:49:58.100+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/婴儿躺中心无加热/session_76b6ce40878b44b4.zip",
+      "session_id": "session_76b6ce40878b44b4",
+      "modality": "热成像",
+      "label": "婴儿躺中心无加热",
+      "sample_count": 530,
+      "started_at": "2026-08-01T17:09:00.343+00:00",
+      "ended_at": "2026-08-01T17:14:23.549+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/左侧站加热/session_4d374eab236e443a.zip",
+      "session_id": "session_4d374eab236e443a",
+      "modality": "热成像",
+      "label": "左侧站加热",
+      "sample_count": 391,
+      "started_at": "2026-08-01T18:36:29.260+00:00",
+      "ended_at": "2026-08-01T18:39:50.094+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/左侧躺加热/session_e047d8b08746433c.zip",
+      "session_id": "session_e047d8b08746433c",
+      "modality": "热成像",
+      "label": "左侧躺加热",
+      "sample_count": 533,
+      "started_at": "2026-08-01T17:31:01.311+00:00",
+      "ended_at": "2026-08-01T17:36:19.313+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/空床/session_3f95a6e3fdd6436c.zip",
+      "session_id": "session_3f95a6e3fdd6436c",
+      "modality": "热成像",
+      "label": "空床",
+      "sample_count": 535,
+      "started_at": "2026-08-01T17:02:02.810+00:00",
+      "ended_at": "2026-08-01T17:07:12.179+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/躺中间加热全遮面/session_6916cc198a934d8e.zip",
+      "session_id": "session_6916cc198a934d8e",
+      "modality": "热成像",
+      "label": "躺中间加热全遮面",
+      "sample_count": 543,
+      "started_at": "2026-08-01T17:58:44.522+00:00",
+      "ended_at": "2026-08-01T18:04:23.867+00:00"
+    },
+    {
+      "archive": "数据集2.0/热成像/躺中间加热部分遮面/session_4c4dbc521e494d6a.zip",
+      "session_id": "session_4c4dbc521e494d6a",
+      "modality": "热成像",
+      "label": "躺中间加热部分遮面",
+      "sample_count": 506,
+      "started_at": "2026-08-01T17:52:31.284+00:00",
+      "ended_at": "2026-08-01T17:57:42.090+00:00"
+    }
+  ],
+  "errors": []
+}

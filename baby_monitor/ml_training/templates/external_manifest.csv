@@ -1,0 +1,2 @@
+source_path,source,detection_label,classification_label,original_label,label_confidence,group_id,baby_id,session_id,license,source_partition
+raw/ICSD/audio/train/example.wav,icsd,cry,,Infantcry,strong_annotation,icsd_original_source_001,,,CC-BY-NC-SA-4.0,train

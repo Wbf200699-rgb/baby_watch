@@ -1,0 +1,139 @@
+version: 1
+
+audio:
+  sample_rate_hz: 16000
+  channels: 1
+  pcm_bits: 16
+  window_samples: 16000
+  window_seconds: 1.0
+  stride_samples: 4000
+  stride_seconds: 0.25
+  max_windows_per_recording: 20
+
+mfcc:
+  frame_length_samples: 400
+  frame_step_samples: 320
+  fft_length: 512
+  window_function: hann
+  window_periodic: true
+  window_zero_padding: centered_in_fft_frame
+  spectrum_power: 2.0
+  mel_bins: 40
+  mfcc_coefficients: 10
+  mfcc_coefficient_range: [0, 9]
+  lower_frequency_hz: 20.0
+  upper_frequency_hz: 8000.0
+  center: false
+  mel_formula: slaney
+  mel_normalization: slaney
+  dct_type: 2
+  dct_norm: ortho
+  power_to_db_amin: 1.0e-10
+  power_to_db_reference: 1.0
+  power_to_db_top_db: 80.0
+  expected_shape: [49, 10, 1]
+
+normalization:
+  remove_dc: true
+  pre_emphasis: 0.0
+  target_rms_dbfs: -20.0
+  minimum_gain: 0.25
+  maximum_gain: 10.0
+  feature_std_floor: 0.0001
+
+augmentation:
+  generic_copies: 1
+  device_chain_copies: 1
+  short_cry_copies: 1
+  generic_snr_db: [6.0, 26.0]
+  short_cry_duration_ms: [120, 700]
+  short_cry_snr_db: [-3.0, 15.0]
+  device_block_samples: 192
+  device_block_target_rms: 0.125
+  device_block_minimum_gain: 0.5
+  device_block_maximum_gain: 8.0
+
+quality:
+  minimum_recording_seconds: 0.5
+  minimum_rms_dbfs: -100.0
+  maximum_clipped_fraction: 0.20
+  minimum_window_rms_dbfs: -78.0
+
+split:
+  seed: 20260724
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+
+tasks:
+  cry_detection:
+    classes: [non_cry, cry]
+  cry_type:
+    classes: [hungry, belly_pain, discomfort, tired, burping, unknown]
+  cry_type_deploy:
+    classes: [hungry, belly_pain, discomfort, tired, burping]
+    exclude_classes: [unknown]
+  cry_type_v1:
+    classes: [hungry, discomfort, tired]
+    exclude_classes: [belly_pain, burping, unknown]
+
+decision:
+  detection_threshold: 0.50
+  consecutive_detection_windows: 3
+  type_confidence_threshold: 0.65
+  type_margin_threshold: 0.15
+  type_window_count: 12
+
+datasets:
+  esc50:
+    directory: ESC-50
+    url: https://github.com/karolpiczak/ESC-50.git
+    license: CC-BY-NC-3.0
+    use_for: [cry_detection]
+  donateacry:
+    directory: donateacry-corpus
+    url: https://github.com/gveres/donateacry-corpus.git
+    license: ODbL-1.0 AND DbCL-1.0
+    use_for: [cry_detection, cry_type]
+  mendeley_infants_cry:
+    directory: mendeley_infants_cry_v1
+    url: https://data.mendeley.com/public-api/zip/hbppd883sd/download/1
+    doi: 10.17632/hbppd883sd.1
+    license: CC-BY-4.0
+    use_for: [cry_detection, cry_type]
+  infantcry_dbl:
+    directory: infantcry_dbl_v1
+    url: https://data.mendeley.com/public-api/zip/x493z8nmwc/download/1
+    doi: 10.17632/x493z8nmwc.1
+    license: CC-BY-4.0
+    expected_audio_files: 1551
+    use_for: [cry_detection, cry_type]
+  tut_rare_events:
+    directory: tut_rare_events_2017
+    archive: tut_rare_events_source.zip
+    url: https://zenodo.org/records/401395/files/TUT-rare-sound-events-2017-development.source_data_events.zip?download=1
+    doi: 10.5281/zenodo.401395
+    expected_archive_md5: dc4b7eb77078b4cf1b670c6362679473
+    expected_segments: 148
+    event: babycry
+    license: per-source-file-see-segments.csv
+    use_for: [cry_detection]
+  ravdess_speech:
+    directory: ravdess_speech_v1
+    archive: Audio_Speech_Actors_01-24.zip
+    url: https://zenodo.org/api/records/1188976/files/Audio_Speech_Actors_01-24.zip/content
+    doi: 10.5281/zenodo.1188976
+    expected_archive_md5: bc696df654c87fed845eb13823edef8a
+    expected_audio_files: 1440
+    license: CC-BY-NC-SA-4.0
+    use_for: [cry_detection]
+  self_recorded:
+    directory: self_recorded
+    license: private-with-consent
+    use_for: [cry_detection, cry_type]
+  device_selected:
+    directory: selected
+    license: private-device-recording
+    use_for: [cry_detection, cry_type]
+  external:
+    manifest: external_manifest.csv
