@@ -35,3 +35,10 @@ replay_pid*.log
 !.env.example
 keystore.properties
 secrets.properties
+
+# Python verification environments and local runtime output
+**/__pycache__/
+*.pyc
+**/.venv/
+.pytest_cache/
+.baby_monitor_demo.json

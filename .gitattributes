@@ -11,3 +11,10 @@ gradlew text eol=lf
 *.png binary
 *.webp binary
 *.jar binary
+
+# Keep GitHub language statistics focused on application code.
+baby_monitor/Multicore_top_CPU*/ra/** linguist-vendored
+baby_monitor/Multicore_top_CPU*/ra_gen/** linguist-generated
+baby_monitor/Multicore_top_CPU*/ra_cfg/** linguist-generated
+baby_monitor/Multicore_top_CPU0/src/vision_models/*_model_data.c linguist-generated
+baby_monitor/mobile/baby_watch/** linguist-vendored

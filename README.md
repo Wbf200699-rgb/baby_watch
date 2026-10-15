@@ -1,117 +1,100 @@
-# baby_watch · 婴儿智能监护 Android 客户端
+# baby_watch · 婴儿智能监护系统
 
-基于 Kotlin 与 Jetpack Compose 的智能硬件配套 App，连接婴儿监护服务端，将实时音视频、多模态安全状态、传感器图像与人工安抚控制整合到手机端。
+面向婴幼儿看护场景的软硬件协同项目，覆盖传感器采集、边缘风险判断、实时音视频传输、服务端管理和 Android 远程监护。
 
-本仓库包含 **Android 客户端源码、自动化测试及项目文档**。RA8P1 双核固件、ESP32-P4 网关与 FastAPI 服务端位于配套项目 [baby_monitor](https://github.com/suchen2333/baby_monitor)。
+系统将视觉、压力、热成像、床面温度和声音等信息汇总为宝宝状态及分级提醒，帮助看护者查看异常原因，并通过手机完成音乐播放、暖光和拍抚等人工安抚操作。
 
-## 项目解决的问题
+## 项目概览
 
-家长需要同时了解宝宝是否在床、是否哭闹、周围环境以及异常发生的原因。客户端把这些分散的数据组织成状态总览、实时监护、传感器可视化和事件时间线；当网络异常或数据失效时，明确展示连接状态和证据可用性。
-
-## 功能与页面
-
-| 页面 | 功能 |
+| 维度 | 内容 |
 | --- | --- |
-| 首页 | 宝宝状态、风险等级、哭声与环境摘要、多模态判断依据 |
-| 监护 | 手动开启实时视频与音频、视觉结果、暖光与拍抚控制、独立摇篮曲和 AI 故事卡片 |
-| 洞察 | 本地监护趋势、事件时间线及服务端 AI 辅助解释 |
-| 传感器 | 四角和中心五点床温、热成像与温度摘要、压力分布、SCD41/BME688 环境数据 |
-| 设置 | 设备连接、监护通知、云端和电脑备用服务的手动切换 |
+| 使用场景 | 婴儿床状态监护、异常提醒、远程查看与安抚 |
+| 硬件平台 | Renesas RA8P1 双核主控、ESP32-P4X-EYE 网关 |
+| 感知能力 | 视觉与哭声、压力分布、热成像、五点床温、温湿度与 CO₂ |
+| 服务端 | Python、FastAPI、SQLite、实时数据接口与网页控制台 |
+| 手机端 | Kotlin、Jetpack Compose、StateFlow、OkHttp |
+| 工程验证 | 协议测试、客户端单元测试、服务端测试与 GitHub Actions |
 
-## 实现重点
+## 主要功能
 
-- **实时通信分工**：HTTP 用于配置、查询和控制，SSE 用于状态与事件，WebSocket 用于视频和音频。
-- **弱网与背压处理**：请求超时、有限重试、连接退避、媒体看门狗；矩阵和视频采用最新帧队列，减少积压。
-- **端点切换隔离**：分别保存云端和本地配置，切换时关闭旧连接、清理旧状态，并通过 generation 校验过滤旧端响应与帧。
-- **可解释安全展示**：解析融合来源有效位及各路证据；未知、失效和过期数据不展示为正常。安全事件按生命周期去重，用户“已查看”与事件解除分开。
-- **设备回读确认**：暖光与拍抚开关以硬件遥测为准，不把服务器接收命令等同于设备已经执行。
-- **凭据保护**：密码使用 Android Keystore 加密保存；云端要求 HTTPS，本地 HTTP 仅接受私网或回环字面 IPv4。
+- **状态总览**：查看在床状态、活动情况、哭声、环境与当前风险等级。
+- **远程监护**：通过服务端查看实时画面并监听声音。
+- **传感器可视化**：展示五点床面温度、热成像、压力分布及环境数据。
+- **分级告警**：呈现安全事件、判断依据、确认与恢复过程。
+- **人工安抚**：独立的摇篮曲与 AI 故事入口，以及暖光、拍抚控制。
+- **电脑备用服务**：公网服务不可用时，可手动将网关和 App 切换到同一局域网电脑服务。
 
-## 系统位置
+## 技术亮点
+
+| 设计 | 工程价值 |
+| --- | --- |
+| 多模态证据融合 | 结合视觉、压力与热成像，降低对单一路径的依赖 |
+| 端侧安全判断 | RA8P1 执行融合与事件状态机，基础判断不依赖云端 AI |
+| 实时链路隔离 | 遥测、矩阵、视频和音频分开传输；最新帧队列减少旧数据积压 |
+| 控制回读确认 | 设备开关依据硬件遥测确认，区分命令接收与实际执行 |
+| 异常恢复与端点隔离 | 退避重连、超时处理、旧连接数据过滤，以及云端/本地配置分离 |
+| 数据与运行观测 | 训练采集、事件时间线、CPU/NPU 利用率与内存余量记录 |
+
+AI 用于状态解释与故事生成；安全告警以边缘融合结果为准。热成像温度属于辅助筛查信息，系统定位为实验原型。
+
+## 系统架构
 
 ```text
 摄像头 / 麦克风 / 压力 / 热成像 / 床温 / 环境传感器
-                        │
-                   RA8P1 双核
-              边缘推理、融合与安全事件
-                        │ UART
-                 ESP32-P4 网关
-                        │ HTTPS / WSS
-                 FastAPI 服务端
-                        │ HTTP / SSE / WebSocket
-                  baby_watch App
+                         ↓
+                RA8P1 双核采集与边缘判断
+                         ↓
+                  ESP32-P4 网关
+                         ↓
+              FastAPI / SQLite 服务端
+                    ↙           ↘
+              网页控制台      Android App
 ```
 
-本地安全决策由 RA8P1 执行；App 负责展示、远程操作和通知。服务端 AI 用于状态解释和故事生成，不替代硬件安全决策。
+## 源码导航
 
-## 技术栈
-
-| 类别 | 当前配置 |
+| 模块 | 入口 |
 | --- | --- |
-| 语言与界面 | Kotlin、少量 Java、Jetpack Compose、Material 3 |
-| 状态与异步 | StateFlow、Kotlin Coroutines、Channel |
-| 网络 | OkHttp 4.12.0、HTTP、SSE、WebSocket |
-| 本地存储 | SharedPreferences、Android Keystore、轻量历史缓存 |
-| 构建 | Gradle Wrapper 9.1.0、Android Gradle Plugin 9.0.1 |
-| Android | minSdk 24，compileSdk / targetSdk 36 |
-| 测试 | JUnit 4、协议解析与网络/矩阵安全测试、Android Lint |
+| 当前维护的 Android App | [app/](app/) |
+| RA8P1 双核固件 | [CPU0](baby_monitor/Multicore_top_CPU0/)、[CPU1](baby_monitor/Multicore_top_CPU1/)、[共享代码](baby_monitor/common/) |
+| ESP32-P4 网关 | [p4x_eye/gateway](baby_monitor/p4x_eye/gateway/) |
+| ESP32-S3 / 早期网关 | [firmware/](baby_monitor/firmware/) |
+| 服务端及网页 | [server/](baby_monitor/server/) |
+| 视觉训练 | [vision_training/](baby_monitor/vision_training/) |
+| 哭声训练 | [ml_training/](baby_monitor/ml_training/) |
+| 融合标定 | [fusion_training/](baby_monitor/fusion_training/) |
+| 协议与演示工具 | [tools/](baby_monitor/tools/) |
+| 原理图与完整原始工程 | [baby_monitor/](baby_monitor/) |
 
-具体依赖以 [版本目录](gradle/libs.versions.toml) 为准。
+根目录的 `app/` 是此前持续优化的客户端。`baby_monitor/mobile/baby_watch/` 是随整套工程保留的上游客户端快照；日常 Android 开发与 CI 使用根目录工程。
 
-## 本地运行
+## 运行与验证
 
-1. 安装 Android Studio，使用 JDK 17 或更新版本，并安装 Android SDK 36。
-2. 克隆本仓库后，用 Android Studio 打开根目录并完成 Gradle 同步。
-3. 让 Android Studio 生成 `local.properties`；该文件不提交到 Git。
-4. 构建并安装到 Android 7.0 及以上手机，在设置中填写服务地址和登录信息。
+**Android App**：使用 Android Studio、JDK 17 或更新版本、Android SDK 36。打开仓库根目录，执行：
 
 ```powershell
-git clone https://github.com/Wbf200699-rgb/baby_watch.git
-cd baby_watch
 .\gradlew.bat testDebugUnitTest lintDebug assembleDebug
 ```
 
-macOS / Linux 使用 `./gradlew`。Debug APK 位于 `app/build/outputs/apk/debug/app-debug.apk`。
+支持 Android 7.0 及以上。APK 输出至 `app/build/outputs/apk/debug/app-debug.apk`，登录凭据在 App 设置中填写，源码不包含真实密码或设备密钥。
 
-云端默认地址是 `https://renesas.zyxserver.online`，实际可用性取决于配套服务的部署；源码不包含登录密码或设备密钥。当前设备标识默认是 `esp32cam-01`。
+**服务端**：进入 [服务端运行说明](baby_monitor/server/README.md)，使用 Python 虚拟环境安装依赖并启动 FastAPI。默认本地服务端口为 `8088`。
 
-### 电脑备用服务（Plan B）
+**硬件与现场部署**：参考 [完整工程说明](baby_monitor/README.md) 和 [电脑备用服务指南](baby_monitor/docs/DEMO_FALLBACK_GUIDE_zh-CN.md)。嵌入式工程需要对应的 e² studio / FSP 和 ESP-IDF 环境。
 
-在配套仓库启动电脑服务，手机设置中手动选择电脑端并填写 `http://电脑私网IPv4:8088`。**网关也必须指向同一电脑服务**。本方案不提供自动接管或双端数据库同步。
+已验证：Android 37 项业务单元测试通过，Lint 0 错误，APK 构建成功；服务端 159 项测试和网页历史逻辑 7 项测试通过。测试环境与完整结果见 [验证记录](docs/PROJECT_STATUS_zh-CN.md)，硬件联调与软件自动化测试分别记录。
 
-离线局域网测试时，手机应保持连接该 Wi-Fi；若系统自动切到蜂窝网络，应关闭移动数据后重试。本地 HTTP 不加密传输，勿复用云端密码。
+[查看持续集成与构建产物](https://github.com/Wbf200699-rgb/baby_watch/actions/workflows/android.yml)
 
-## 目录结构
+## 项目资料
 
-```text
-app/src/main/
-├── java/com/example/baby_watch/
-│   ├── data/server/       协议模型、仓库、通信、配置、历史与事件策略
-│   ├── ui/                Compose 页面、组件与主题
-│   ├── notification/      告警通知、铃声与振动
-│   └── service/           前台监护服务与日志
-└── res/                   图标、主题与 Android 资源
-app/src/test/              JVM 单元测试
-app/src/androidTest/       Android 仪器测试入口
-docs/                      架构、测试、演示和版本整理记录
-gradle/                    Wrapper 与依赖版本目录
-```
-
-## 文档与验证
-
-2026-10-14 本地验证：**37 项业务单元测试通过，Android Lint 0 错误，Debug APK 构建成功**。Lint 另有 13 项非阻断警告；硬件与真机联调不包含在该结果内。
-
-- [App 架构与通信说明](docs/APP_ARCHITECTURE_zh-CN.md)
+- [项目详细说明](docs/PROJECT_OVERVIEW_zh-CN.md)
+- [App 架构与通信设计](docs/APP_ARCHITECTURE_zh-CN.md)
 - [6 分钟演示顺序](docs/DEMO_6_MIN_zh-CN.md)
-- [全流程测试与答辩指南](docs/CURRENT_FULL_FLOW_TEST_AND_DEMO_PLAN_zh-CN.md)
-- [本轮整理与验证记录](docs/PROJECT_STATUS_zh-CN.md)
+- [全流程测试方案](docs/CURRENT_FULL_FLOW_TEST_AND_DEMO_PLAN_zh-CN.md)
+- [项目整理与验证记录](docs/PROJECT_STATUS_zh-CN.md)
+- [完整工程来源与导入记录](docs/UPSTREAM_IMPORT_zh-CN.md)
 
-持续集成入口：[Android checks](https://github.com/Wbf200699-rgb/baby_watch/actions/workflows/android.yml)。
+## 版本与来源
 
-## 简历描述参考
-
-婴儿智能监护 Android 客户端：使用 Kotlin、Jetpack Compose、StateFlow 和 OkHttp 实现实时监护界面，接入 HTTP/SSE/WebSocket 数据链路，完成多模态安全事件、传感器可视化与安抚控制交互；针对弱网和服务切换实现退避重连、最新帧队列与端点状态隔离。
-
-以上是代码能力概述；个人职责、团队分工和性能指标应按本人实际贡献与测试记录填写。
-
-本项目是智能监护实验原型。热成像与床面温度用于辅助筛查和状态展示，不能代替医疗测温或诊断；系统仍需人工看护。自动化测试与真机、硬件联调结果分别记录，不互相替代。
+完整工程来自 [suchen2333/baby_monitor](https://github.com/suchen2333/baby_monitor)，导入基线为 `agent/thermal-quality-reset-header` 分支的 `fbe6663`。保留原文件及其中的版权和许可说明；本仓库同时维护 Android 客户端的迭代与验证记录。

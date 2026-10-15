@@ -14,6 +14,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  server:
+    name: Server and protocol checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONUTF8: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: baby_monitor/server/requirements.txt
+      - name: Install server dependencies
+        run: python -m pip install -r baby_monitor/server/requirements.txt
+      - name: Test server and protocol contracts
+        run: python -m unittest discover -s baby_monitor/server/tests -v
+      - name: Test dashboard history
+        run: node --test baby_monitor/server/tests/test_telemetry_history.js
+      - name: Check dashboard syntax
+        run: node --check baby_monitor/server/static/app.js
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
