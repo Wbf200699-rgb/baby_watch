@@ -1,0 +1,52 @@
+version: 2
+target:
+  device: R7KA8P1KFLCAC
+  cpu: Cortex-M85
+  npu: Ethos-U55-256
+  quantization: int8
+  ruhmi_reference: https://github.com/renesas/ruhmi-model-zoo
+
+scene_detector:
+  architecture: yolox_tiny
+  input_shape: [224, 224, 3]
+  input_layout: NHWC
+  source_buffer_color: RGB
+  input_color: BGR
+  input_range: [0, 255]
+  classes: [infant, head_face, blanket, soft_object, caregiver]
+  critical_classes: [infant, head_face]
+  output_shape: [1, 1029, 10]
+  fpn_strides: [8, 16, 32]
+  deployment_fps: [2, 4]
+  max_tflite_bytes: 8388608
+
+occlusion_classifier:
+  architecture: mobilenet_v3_small_minimalistic
+  input_shape: [192, 192, 3]
+  input_layout: NHWC
+  input_color: RGB
+  input_range: [0, 255]
+  classes: [clear, partial, covered, not_visible]
+  critical_classes: [covered]
+  deployment_fps: 4
+  max_tflite_bytes: 4194304
+
+behavior_classifier:
+  architecture: mobilenet_v3_small_minimalistic
+  input_shape: [192, 192, 3]
+  input_layout: NHWC
+  input_color: RGB
+  input_range: [0, 255]
+  semantic: posture
+  classes: [lying, sitting, crawling_kneeling, standing, unknown]
+  critical_classes: [standing]
+  deployment_fps: [1, 2]
+  max_tflite_bytes: 4194304
+
+split_policy:
+  group_key_priority: [real_infant_id, source_video_id, doll_id, session_id]
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  seed: 20260725
+  never_random_split_frames: true

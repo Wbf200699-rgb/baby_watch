@@ -1,0 +1,17 @@
+/*
+                  Linker File for Renesas FSP
+*/
+
+INCLUDE memory_regions.lld
+INCLUDE fsp_gen.lld
+
+SECTIONS
+{
+  .vision_models ORIGIN(OSPI0_CS0) : ALIGN(32)
+  {
+    KEEP(*(.vision_models))
+  } > OSPI0_CS0
+}
+
+ASSERT(__ddsc_SDRAM_END <= (ORIGIN(SDRAM) + 0x01000000),
+       "SDRAM sections exceed the 16 MiB W9812G2KB capacity")

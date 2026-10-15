@@ -1,0 +1,8 @@
+services:
+  app:
+    ports:
+      # Docker restores containers before tailscale0 is ready after a Pi reboot.
+      # A wildcard bind survives that boot ordering; API/dashboard auth still applies.
+      - "${BABY_MONITOR_BIND_IP:-0.0.0.0}:8088:8088"
+  caddy:
+    profiles: ["direct-public"]

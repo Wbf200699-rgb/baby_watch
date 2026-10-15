@@ -1,0 +1,2 @@
+image_path,session_id,subject_id,doll_id,source_video_id,split,include,head_x,head_y,head_w,head_h,infant_x,infant_y,infant_w,infant_h,occlusion_label,posture_label,position_zone,caregiver_present,image_quality,exclude_reason,notes
+sessions/demo_v2/frames/frame_000000.jpg,demo_v2,subject_demo,doll_001,,train,0,120,60,100,100,70,40,260,300,clear,lying,center,0,good,demo_only,示例行默认不参与训练

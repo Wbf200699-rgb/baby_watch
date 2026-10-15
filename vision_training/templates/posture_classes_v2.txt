@@ -1,0 +1,5 @@
+lying
+sitting
+crawling_kneeling
+standing
+unknown

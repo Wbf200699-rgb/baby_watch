@@ -1,0 +1,97 @@
+target:
+  device: R7KA8P1KFLCAC
+  cpu: Cortex-M85
+  npu: Ethos-U55-256
+  quantization: int8
+  on_chip_sram_bytes: 2097152
+  current_external_sdram: false
+
+models:
+  cry:
+    architecture: ds_cnn
+    input_shape: [49, 40, 1]
+    classes: [other, cry]
+    max_tflite_bytes: 262144
+    max_arena_bytes: 524288
+    legacy: true
+  cry_detection:
+    architecture: ds_cnn
+    input_shape: [49, 10, 1]
+    classes: [non_cry, cry]
+    max_tflite_bytes: 262144
+    max_arena_bytes: 524288
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_detection_tiny:
+    architecture: tiny_mlp
+    input_shape: [49, 10, 1]
+    classes: [non_cry, cry]
+    max_tflite_bytes: 32768
+    max_arena_bytes: 65536
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_detection_mlp:
+    architecture: compact_mlp
+    input_shape: [49, 10, 1]
+    classes: [non_cry, cry]
+    max_tflite_bytes: 65536
+    max_arena_bytes: 131072
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_type:
+    architecture: ds_cnn
+    input_shape: [49, 10, 1]
+    classes: [hungry, belly_pain, discomfort, tired, burping, unknown]
+    max_tflite_bytes: 262144
+    max_arena_bytes: 524288
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_type_mlp:
+    architecture: compact_mlp
+    input_shape: [49, 10, 1]
+    classes: [hungry, belly_pain, discomfort, tired, burping]
+    max_tflite_bytes: 65536
+    max_arena_bytes: 131072
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_type_v1_mlp:
+    architecture: compact_mlp
+    input_shape: [49, 10, 1]
+    classes: [hungry, discomfort, tired]
+    max_tflite_bytes: 65536
+    max_arena_bytes: 131072
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  cry_type_sequence_mlp:
+    architecture: compact_mlp
+    input_shape: [49, 10, 2]
+    classes: [hungry, discomfort, tired]
+    max_tflite_bytes: 131072
+    max_arena_bytes: 196608
+    max_int8_accuracy_drop: 0.03
+    preprocessing_contract: data/features/preprocessing_contract.json
+  pressure:
+    architecture: tiny_cnn
+    input_shape: [16, 16, 1]
+    classes: [empty, lying, sitting, standing, moving]
+    max_tflite_bytes: 131072
+    max_arena_bytes: 262144
+  thermal:
+    architecture: ds_cnn
+    input_shape: [64, 80, 1]
+    classes: [empty, normal, edge, covered, abnormal_heat]
+    max_tflite_bytes: 262144
+    max_arena_bytes: 786432
+  vision:
+    architecture: mobilenet_v3_small
+    input_shape: [160, 160, 3]
+    classes: [sleeping, standing, face_clear, face_covered, abnormal_pose]
+    max_tflite_bytes: 1048576
+    max_arena_bytes: 1671168
+    requires_external_memory: true
+  fusion:
+    architecture: mlp
+    input_shape: [24]
+    classes: [normal, cry, covered, edge, overheat, out_of_bed]
+    max_tflite_bytes: 65536
+    max_arena_bytes: 131072

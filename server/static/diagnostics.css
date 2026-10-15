@@ -1,0 +1,145 @@
+.sensor-health-heading > span {
+  font-weight: 650;
+}
+
+.sensor-health-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(240px, 1fr));
+  gap: 10px;
+}
+
+.sensor-health-card {
+  min-width: 0;
+  padding: 14px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-left: 4px solid #89979c;
+  border-radius: 6px;
+}
+
+.sensor-health-card.status-ok {
+  border-left-color: var(--green);
+}
+
+.sensor-health-card.status-warning {
+  border-left-color: var(--amber);
+}
+
+.sensor-health-card.status-fault {
+  border-left-color: var(--danger);
+}
+
+.sensor-health-card.status-offline {
+  border-left-color: #89979c;
+  background: #f8fafb;
+}
+
+.sensor-health-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.sensor-health-title h2 {
+  margin: 0;
+  color: #172126;
+  font-size: 14px;
+}
+
+.sensor-health-state {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.sensor-health-summary {
+  margin: 10px 0 5px;
+  color: #26343a;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.sensor-health-detail {
+  min-height: 34px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.sensor-channel-list {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 10px 0 0;
+  border-top: 1px solid #edf0f1;
+  list-style: none;
+}
+
+.sensor-channel-list li {
+  display: grid;
+  grid-template-columns: 8px minmax(90px, auto) minmax(0, 1fr);
+  align-items: center;
+  gap: 7px;
+  min-height: 22px;
+  font-size: 11px;
+}
+
+.sensor-channel-dot {
+  width: 7px;
+  height: 7px;
+  background: #89979c;
+  border-radius: 50%;
+}
+
+.sensor-channel-dot.status-ok {
+  background: var(--green);
+}
+
+.sensor-channel-dot.status-warning {
+  background: var(--amber);
+}
+
+.sensor-channel-dot.status-fault {
+  background: var(--danger);
+}
+
+.sensor-channel-name {
+  color: #334148;
+  font-weight: 600;
+}
+
+.sensor-channel-detail {
+  min-width: 0;
+  color: var(--muted);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1320px) {
+  .sensor-health-grid {
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .sensor-health-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .sensor-health-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .sensor-channel-list li {
+    grid-template-columns: 8px minmax(0, 1fr);
+  }
+
+  .sensor-channel-detail {
+    grid-column: 2;
+    text-align: left;
+  }
+}

@@ -1,0 +1,13 @@
+session_id,doll_id,camera_id,lighting,bed_set,pose,occlusion,behavior,target_frames,completed,notes
+day_a_center_clear,doll_001,ra8_final_camera,day,set_a,supine,clear,quiet,120,0,
+day_a_partial,doll_001,ra8_final_camera,day,set_a,supine,partial,quiet,120,0,
+day_a_covered,doll_001,ra8_final_camera,day,set_a,supine,covered,quiet,120,0,只可用玩偶模拟
+day_a_not_visible,doll_001,ra8_final_camera,day,set_a,prone,not_visible,unknown,120,0,
+day_a_active,doll_001,ra8_final_camera,day,set_a,varied,clear,active,120,0,人工逐帧改变姿势
+day_a_edge,doll_001,ra8_final_camera,day,set_a,near_edge,clear,edge_grab,120,0,
+day_a_caregiver,doll_001,ra8_final_camera,day,set_a,caregiver_hand,partial,caregiver,120,0,
+night_a_center_clear,doll_001,ra8_final_camera,night_ir,set_a,supine,clear,quiet,120,0,
+night_a_partial,doll_001,ra8_final_camera,night_ir,set_a,supine,partial,quiet,120,0,
+night_a_edge,doll_001,ra8_final_camera,night_ir,set_a,near_edge,clear,edge_grab,120,0,
+empty_day_a,none,ra8_final_camera,day,set_a,empty,not_visible,unknown,120,0,用于检测模型负样本
+empty_night_a,none,ra8_final_camera,night_ir,set_a,empty,not_visible,unknown,120,0,用于检测模型负样本

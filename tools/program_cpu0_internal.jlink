@@ -1,0 +1,10 @@
+device R7KA8P1KF_CPU0
+si SWD
+speed 4000
+connect
+r
+h
+loadfile Multicore_top_CPU0/Debug/Multicore_top_CPU0_internal.srec
+r
+g
+exit

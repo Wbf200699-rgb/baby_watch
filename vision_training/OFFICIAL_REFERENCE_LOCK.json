@@ -1,0 +1,25 @@
+{
+  "checked_at_utc": "2026-07-24T21:10:17Z",
+  "yolox": {
+    "repository": "https://github.com/Megvii-BaseDetection/YOLOX.git",
+    "commit": "6ddff4824372906469a7fae2dc3206c7aa4bbaee"
+  },
+  "ruhmi_model_zoo": {
+    "repository": "https://github.com/renesas/ruhmi-model-zoo.git",
+    "commit": "c4e393c8ae1d54c78bf38efffbfa0f0213113ff4",
+    "paths": [
+      "ruhmi_tools",
+      "vision/object_detection/yolox_tiny",
+      "vision/image_classification/mobilenetv3"
+    ]
+  },
+  "validated_toolchain": {
+    "windows_python": "3.12",
+    "tensorflow": "2.19.0",
+    "pytorch": "2.13.0+cu130",
+    "onnx": "1.19.1",
+    "wsl_distribution": "Ubuntu 24.04",
+    "onnxsim": "0.4.36",
+    "onnx2tf": "1.29.24"
+  }
+}

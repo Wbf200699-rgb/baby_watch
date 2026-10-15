@@ -1,0 +1,17 @@
+{
+    "configurations": [
+      {
+        "name": "RA8P1",
+        "includePath": [
+          "${workspaceFolder}/M85/**",
+          "${workspaceFolder}/M33/**",
+          "${workspaceFolder}/common/**"
+        ],
+        "defines": [],
+        "compilerPath": "C:/Renesas/RA/e2studio_v2025-12_fsp_v6.4.0/toolchains/gcc_arm/13.2.rel1/bin/arm-none-eabi-gcc.exe",
+        "cStandard": "c11",
+        "intelliSenseMode": "gcc-arm"
+      }
+    ],
+    "version": 4
+  }

@@ -1,0 +1,27 @@
+# ===== e2studio / RA build =====
+Debug/
+Release/
+.settings/
+.metadata/
+
+*.log
+*.elf
+*.bin
+*.hex
+*.map
+
+# ===== temporary =====
+*.tmp
+*.bak
+__pycache__/
+*.pyc
+tools/ra8_esp32_protocol/logs/
+test_results/
+.claude/
+.tmp_*/
+%SystemDrive%/
+*.disabled
+
+# ===== OS =====
+.DS_Store
+Thumbs.db

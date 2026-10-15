@@ -1,0 +1,66 @@
+services:
+  app:
+    build:
+      context: .
+      args:
+        PYTHON_IMAGE: ${PYTHON_IMAGE:-python:3.12-slim}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: baby-monitor-server:latest
+    restart: unless-stopped
+    environment:
+      BABY_MONITOR_DATA_DIR: /data
+      BABY_MONITOR_DEVICE_KEYS: ${BABY_MONITOR_DEVICE_KEYS:?set BABY_MONITOR_DEVICE_KEYS}
+      BABY_MONITOR_OFFLINE_SECONDS: ${BABY_MONITOR_OFFLINE_SECONDS:-10}
+      BABY_MONITOR_VIDEO_TARGET_FPS: ${BABY_MONITOR_VIDEO_TARGET_FPS:-8}
+      BABY_MONITOR_ALLOW_ARTIFACT_UPLOAD: "0"
+      BABY_MONITOR_ADMIN_USER: ${ADMIN_USER:-}
+      BABY_MONITOR_ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+      BABY_MONITOR_AI_ENABLED: ${BABY_MONITOR_AI_ENABLED:-0}
+      DASHSCOPE_API_KEY: ${DASHSCOPE_API_KEY:-}
+      BABY_MONITOR_QWEN_MODEL: ${BABY_MONITOR_QWEN_MODEL:-qwen-plus}
+      BABY_MONITOR_QWEN_CHAT_URL: ${BABY_MONITOR_QWEN_CHAT_URL:-https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions}
+      BABY_MONITOR_QWEN_TTS_MODEL: ${BABY_MONITOR_QWEN_TTS_MODEL:-qwen-audio-3.0-tts-flash}
+      BABY_MONITOR_QWEN_TTS_VOICE: ${BABY_MONITOR_QWEN_TTS_VOICE:-longanhuan_v3.6}
+      BABY_MONITOR_QWEN_TTS_URL: ${BABY_MONITOR_QWEN_TTS_URL:-https://dashscope.aliyuncs.com/api/v1/services/audio/tts/SpeechSynthesizer}
+      BABY_MONITOR_AI_ASSESSMENT_INTERVAL_SECONDS: ${BABY_MONITOR_AI_ASSESSMENT_INTERVAL_SECONDS:-600}
+      BABY_MONITOR_AI_EVENT_COOLDOWN_SECONDS: ${BABY_MONITOR_AI_EVENT_COOLDOWN_SECONDS:-60}
+      BABY_MONITOR_AI_STORY_MAX_BYTES: ${BABY_MONITOR_AI_STORY_MAX_BYTES:-4194304}
+    volumes:
+      - baby_monitor_data:/data
+    networks:
+      - internal
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8088/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      DOMAIN: ${DOMAIN:-renesas.zyxserver.online}
+      ADMIN_USER: ${ADMIN_USER:?set ADMIN_USER}
+      ADMIN_PASSWORD_HASH: ${ADMIN_PASSWORD_HASH:?set ADMIN_PASSWORD_HASH}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - internal
+
+networks:
+  internal:
+
+volumes:
+  baby_monitor_data:
+  caddy_data:
+  caddy_config:

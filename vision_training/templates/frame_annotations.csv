@@ -1,0 +1,2 @@
+image_path,session_id,doll_id,real_infant_id,source_video_id,split,include,head_x,head_y,head_w,head_h,infant_x,infant_y,infant_w,infant_h,occlusion_label,behavior_label,quality,notes
+sessions/demo_day_clear/frames/frame_000000.jpg,demo_day_clear,doll_001,,,train,0,120,60,100,100,70,40,260,300,clear,quiet,good,示例行默认不参与训练
