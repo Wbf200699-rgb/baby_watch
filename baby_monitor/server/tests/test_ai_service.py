@@ -81,6 +81,9 @@ class AiRuntimeTest(IsolatedAsyncioTestCase):
             device_keys={"dev": "secret"},
             ai_enabled=True,
             dashscope_api_key="test-only-key",
+            # These tests cover advisory logic, not uptime-dependent scheduling.
+            ai_assessment_interval_seconds=0,
+            ai_event_cooldown_seconds=0,
         )
         self.database = Database(self.settings.database_path)
         self.database.initialize()
